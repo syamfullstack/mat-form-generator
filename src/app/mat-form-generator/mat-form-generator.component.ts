@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 const ELEMENT_DATA: any[] = [
   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
   {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
@@ -23,25 +23,56 @@ export class MatFormGeneratorComponent implements OnInit {
   inputJson: FormControl = new FormControl();
   displayedColumns: string[] = ['propertyName', 'inputType', 'inputArray', 'valueField', 'displayField', 'required'];
   dataSource = [];
-  inputTypes: string[] = ['textbox', 'select', 'radio', 'checkbox'];
+  inputTypes: string[] = ['textbox', 'select', 'radio', 'checkbox', 'datebox'];
 
-  constructor() { }
+  inputFormGroup: FormGroup;
+
+  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.inputJson.valueChanges.subscribe((data: string) => {
       const columns = [];
-      const keys = Object.keys(JSON.parse(data));
-      keys.forEach((key: string) => {
-        columns.push({
-          propertyName: key,
-          inputType: null,
-          inputArray: null,
-          valueField: null,
-          displayField: null,
-          required: true
+      try {
+        const keys = Object.keys(JSON.parse(data));
+        keys.forEach((key: string) => {
+          columns.push({
+            propertyName: key,
+            inputType: null,
+            inputArray: null,
+            valueField: null,
+            displayField: null,
+            required: true
+          });
         });
-      });
-      this.dataSource = columns;
+        this.dataSource = columns;
+      }
+      catch(ex) {
+
+      }
+      
+    });
+  }
+
+  addRow() {
+    this.dataSource = [...this.dataSource, {
+      propertyName: null,
+      inputType: null,
+      inputArray: null,
+      valueField: null,
+      displayField: null,
+      required: true
+    }];
+  }
+
+  createForm() {
+    this.inputFormGroup = this.formBuilder.group({});
+    this.dataSource.forEach(a => {
+      if (!this.inputFormGroup.get(a.propertyName)) {
+        this.inputFormGroup.addControl(a.propertyName, new FormControl());
+      }
+    });
+    setTimeout(() => {
+      this.cdr.detectChanges();
     });
   }
 

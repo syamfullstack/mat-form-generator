@@ -29,14 +29,18 @@
  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-width">
     <ng-container matColumnDef="propertyName">
       <th mat-header-cell *matHeaderCellDef> Property Name. </th>
-      <td mat-cell *matCellDef="let element"> {{element.propertyName}} </td>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Input" [(ngModel)]="element.propertyName">
+        </mat-form-field>
+      </td>
     </ng-container>
   
     <ng-container matColumnDef="inputType">
       <th mat-header-cell *matHeaderCellDef> Input Type </th>
       <td mat-cell *matCellDef="let element">
         <mat-select placeholder="Select" [(ngModel)]="element.inputType">
-            <mat-option *ngFor="let option of inputTypes" value="option">{{option}}</mat-option>
+            <mat-option *ngFor="let option of inputTypes" value="{{option}}">{{option}}</mat-option>
         </mat-select>
       </td>
     </ng-container>
@@ -69,3 +73,29 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  <button (click)="createForm()">Preview</button>
+  <button (click)="addRow()">Add Row</button>
+  <pre *ngIf="inputFormGroup">{{inputFormGroup.value | json}}</pre>
+
+
+
+  <form *ngIf="inputFormGroup" [formGroup]="inputFormGroup">
+    <ng-container *ngFor="let data of dataSource">
+      <!-- <ng-container *ngIf="data.inputType === 'textbox'">
+          <mat-form-field class="example-full-width" *ngIf="inputFormGroup.get(data.propertyName)">
+            <input matInput placeholder="{{data.propertyName}}" [formControl]="inputFormGroup.get(data.propertyName)">
+          </mat-form-field>
+      </ng-container> -->
+            
+      <ng-container [ngSwitch]="data.inputType" *ngIf="inputFormGroup.get(data.propertyName)">
+        <mat-form-field class="example-full-width" *ngSwitchCase="'textbox'">
+              <input matInput placeholder="Input" [formControl]="inputFormGroup.get(data.propertyName)">
+        </mat-form-field>
+        <mat-form-field *ngSwitchCase="'datebox'">
+            <input matInput [matDatepicker]="picker1" placeholder="Date" [formControl]="inputFormGroup.get(data.propertyName)">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+      </ng-container>
+    </ng-container>
+  </form>
