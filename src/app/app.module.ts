@@ -16,14 +16,22 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
+
 import { MatFormGeneratorComponent } from './mat-form-generator/mat-form-generator.component';
 import { CommonModule } from '@angular/common';
+import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-drop/mat-form-generator-drag-drop.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MaterialFormComponent,
-    MatFormGeneratorComponent
+    MatFormGeneratorComponent,
+    MatFormGeneratorDragDropComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +50,11 @@ import { CommonModule } from '@angular/common';
     MatRadioModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatTableModule
+    MatTableModule,
+    DragDropModule,
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
