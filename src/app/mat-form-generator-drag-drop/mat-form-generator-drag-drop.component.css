@@ -77,3 +77,6 @@
     /* Support for IE. */
     font-feature-settings: 'liga';
   }
+  .full-width {
+    width: 100% !important;
+  }

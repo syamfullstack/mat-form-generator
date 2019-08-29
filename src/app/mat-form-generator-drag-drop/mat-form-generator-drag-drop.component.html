@@ -1,73 +1,129 @@
-<div cdkDropListGroup>
-  <div class="example-container">
-    <h2>To do</h2>
+ <!-- <button (click)="openSettings(i)">
+                  settings</button> -->
+ <div cdkDropListGroup>
+   <div class="example-container">
+     <h2>To do</h2>
 
-    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-      <div class="example-box" *ngFor="let item of controls" cdkDrag [cdkDragData]="item">{{item.inputType}}</div>
-    </div>
-  </div>
+     <div cdkDropList class="example-list">
+       <div class="example-box" *ngFor="let item of controls" cdkDrag [cdkDragData]="item">{{item.inputType}}</div>
+     </div>
+   </div>
 
-  <div class="example-container">
-    <h2>Done</h2>
+   <div class="example-container">
+     <h2>Done</h2>
 
-    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-      <!-- <div class="example-box" *ngFor="let item of done">{{item}}</div> -->
+     <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+       <div *ngFor="let data of selectedControls">
+         <ng-container *ngIf="inputFormGroup.get(data.propertyName) && data.inputType === 'textBox'">
+           <mat-form-field class="example-full-width full-width" cdkDrag>
+             <input matInput placeholder="{{data.displayName}}" [formControl]="inputFormGroup.get(data.propertyName)">
+
+             <ng-container *ngIf="data.openSettings">
+               <ng-container *ngTemplateOutlet="settings; context: {$implicit: data, index: i}"></ng-container>
+             </ng-container>
+           </mat-form-field>
+         </ng-container>
+
+         <ng-container *ngIf="inputFormGroup.get(data.propertyName) && data.inputType === 'dateBox'">
+           <mat-form-field class="example-full-width full-width" cdkDrag>
+             <input matInput [matDatepicker]="picker1" placeholder="{{data.displayName}}"
+               [formControl]="inputFormGroup.get(data.propertyName)">
+             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+             <mat-datepicker #picker1></mat-datepicker>
+           </mat-form-field>
+         </ng-container>
+
+         <ng-container *ngIf="inputFormGroup.get(data.propertyName) && data.inputType === 'toggle'">
+           <mat-slide-toggle [formControl]="inputFormGroup.get(data.propertyName)" cdkDrag>{{data.displayName}}
+           </mat-slide-toggle>
+         </ng-container>
+
+         <ng-container *ngIf="inputFormGroup.get(data.propertyName) && data.inputType === 'checkBox'">
+            <mat-checkbox [formControl]="inputFormGroup.get(data.propertyName)" cdkDrag>{{data.displayName}}</mat-checkbox>
+          </ng-container>
+       </div>
+     </div>
+
+     <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" #doneList="cdkDropList">
       <form *ngIf="inputFormGroup" [formGroup]="inputFormGroup">
         <ng-container *ngFor="let data of selectedControls; let i=index">
-          <!-- <ng-container *ngIf="data.inputType === 'textbox'">
-                  <mat-form-field class="example-full-width" *ngIf="inputFormGroup.get(data.propertyName)">
-                    <input matInput placeholder="{{data.propertyName}}" [formControl]="inputFormGroup.get(data.propertyName)">
-                  </mat-form-field>
-              </ng-container> -->
 
           <ng-container [ngSwitch]="data.inputType" *ngIf="inputFormGroup.get(data.propertyName)">
-            <mat-form-field class="example-full-width" *ngSwitchCase="'textBox'">
-              <input matInput placeholder="{{data.displayName}}" [formControl]="inputFormGroup.get(data.propertyName)">
-              <button (click)="openSettings(i)">
-                settings</button>
-              <!-- <button mat-icon-button>
-                                    <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
-                                  </button>
-                                  <button mat-button><mat-icon>mic</mat-icon> Start Recording</button>
-                            <mat-icon mat-icon-button aria-hidden="false" aria-label="Example home icon">home</mat-icon>
-                            <mat-icon class="mat-icon-rtl-mirror" svgIcon="thumb-up"></mat-icon> -->
-              <ng-container *ngIf="data.openSettings">
-                <ng-container *ngTemplateOutlet="settings; context: {$implicit: data, index: i}"></ng-container>
-              </ng-container>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'dateBox'">
-              <input matInput [matDatepicker]="picker1" placeholder="{{data.displayName}}"
-                [formControl]="inputFormGroup.get(data.propertyName)">
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
+            
+            <ng-container *ngSwitchCase="'textBox'">
+              <mat-form-field class="example-full-width full-width" cdkDrag>
+                <input matInput placeholder="{{data.displayName}}"
+                  [formControl]="inputFormGroup.get(data.propertyName)">
+               
+                <ng-container *ngIf="data.openSettings">
+                  <ng-container *ngTemplateOutlet="settings; context: {$implicit: data, index: i}"></ng-container>
+                </ng-container>
+              </mat-form-field>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'dateBox'">
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker1" placeholder="{{data.displayName}}"
+                  [formControl]="inputFormGroup.get(data.propertyName)">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'toggle'">
+              <mat-slide-toggle [formControl]="inputFormGroup.get(data.propertyName)">{{data.displayName}}
+              </mat-slide-toggle>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'checkBox'">
+              <mat-checkbox [formControl]="inputFormGroup.get(data.propertyName)">{{data.displayName}}</mat-checkbox>
+            </ng-container>
+
+
           </ng-container>
+
         </ng-container>
       </form>
-    </div>
-  </div>
-</div>
-<pre>{{ inputFormGroup?.value | json }}</pre>
-<ng-template #settings let-data let-index="index">
-  index {{index}}
-  <h2 mat-dialog-title>Settings</h2>
-  <mat-dialog-content>
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="Property Name" [(ngModel)]="selectedSettings.propertyName">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="Input Array" [(ngModel)]="selectedSettings.inputArray">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-        <input matInput placeholder="Value Field" [(ngModel)]="selectedSettings.valueField">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-        <input matInput placeholder="Display Field" [(ngModel)]="selectedSettings.displayField">
-    </mat-form-field>
-    <mat-checkbox [(ngModel)]="selectedSettings.required">Validation Required</mat-checkbox>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-button (click)="closeSettings(index)">No</button>
-    <button mat-button (click)="applySettings(index)">Yes</button>
-  </mat-dialog-actions>
-</ng-template>
+    </div> -->
+   </div>
+ </div>
+ <pre>{{ inputFormGroup?.value | json }}</pre>
+ <ng-template #settings let-data let-index="index">
+   index {{index}}
+   <h2 mat-dialog-title>Settings</h2>
+   <mat-dialog-content>
+     <mat-form-field class="example-full-width">
+       <input matInput placeholder="Property Name" [(ngModel)]="selectedSettings.propertyName">
+     </mat-form-field>
+     <mat-form-field class="example-full-width">
+       <input matInput placeholder="Input Array" [(ngModel)]="selectedSettings.inputArray">
+     </mat-form-field>
+     <mat-form-field class="example-full-width">
+       <input matInput placeholder="Value Field" [(ngModel)]="selectedSettings.valueField">
+     </mat-form-field>
+     <mat-form-field class="example-full-width">
+       <input matInput placeholder="Display Field" [(ngModel)]="selectedSettings.displayField">
+     </mat-form-field>
+     <mat-checkbox [(ngModel)]="selectedSettings.required">Validation Required</mat-checkbox>
+   </mat-dialog-content>
+   <mat-dialog-actions>
+     <button mat-button (click)="closeSettings(index)">No</button>
+     <button mat-button (click)="applySettings(index)">Yes</button>
+   </mat-dialog-actions>
+ </ng-template>
+
+ <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop1($event)">
+   <div class="example-box" *ngFor="let movie of movies" cdkDrag>{{movie}}</div>
+ </div>
+
+ <div cdkDropList class="example-list" (cdkDropListDropped)="dropToExisting($event)">
+   <div class="example-box" *ngFor="let data of selectedControls">
+     <mat-form-field class="example-full-width full-width" cdkDrag>
+       <input matInput placeholder="{{data.displayName}}" [formControl]="inputFormGroup.get(data.propertyName)">
+
+       <ng-container *ngIf="data.openSettings">
+         <ng-container *ngTemplateOutlet="settings; context: {$implicit: data, index: i}"></ng-container>
+       </ng-container>
+     </mat-form-field>
+   </div>
+ </div> -->

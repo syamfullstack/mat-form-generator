@@ -17,31 +17,52 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     displayField: null,
     required: true,
     openSettings: false
-    },
-    {
-      propertyName: 'selectBox',
-      inputType: 'selectBox',
-      displayName: null,
-      inputArray: null,
-      valueField: null,
-      displayField: null,
-      required: true,
-      openSettings: false
-    },
-    {
-      propertyName: 'datebox',
-      inputType: 'dateBox',
-      displayName: null,
-      inputArray: null,
-      valueField: null,
-      displayField: null,
-      required: true,
-      openSettings: false
-    }];
+  },
+  {
+    propertyName: 'selectBox',
+    inputType: 'selectBox',
+    displayName: null,
+    inputArray: null,
+    valueField: null,
+    displayField: null,
+    required: true,
+    openSettings: false
+  },
+  {
+    propertyName: 'datebox',
+    inputType: 'dateBox',
+    displayName: null,
+    inputArray: null,
+    valueField: null,
+    displayField: null,
+    required: true,
+    openSettings: false
+  },
+  {
+    propertyName: 'toggle',
+    inputType: 'toggle',
+    displayName: null,
+    inputArray: null,
+    valueField: null,
+    displayField: null,
+    required: true,
+    openSettings: false
+  },
+  {
+    propertyName: 'checkBox',
+    inputType: 'checkBox',
+    displayName: null,
+    inputArray: null,
+    valueField: null,
+    displayField: null,
+    required: true,
+    openSettings: false
+  }];
 
-    selectedControls: any[] = [];
-    inputFormGroup: FormGroup;
-    selectedSettings: any;
+
+  selectedControls: any[] = [];
+  inputFormGroup: FormGroup;
+  selectedSettings: any;
 
   constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) { }
 
@@ -49,22 +70,24 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     this.inputFormGroup = this.formBuilder.group({});
   }
 
+  drop1(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
+  }
+
   drop(event: CdkDragDrop<string[]>) {
-    debugger;
-    // if (event.previousContainer === event.container) {
-    //   moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    // } else {
-    //   transferArrayItem(event.previousContainer.data,
-    //                     event.container.data,
-    //                     event.previousIndex,
-    //                     event.currentIndex);
-    // }
     if (event.item.data) {
       const control = { ...event.item.data };
       control.propertyName = control.propertyName +
         (+this.selectedControls.filter(a => a.inputType === control.inputType).length + 1);
       control.displayName = control.propertyName;
       this.selectedControls = [...this.selectedControls, control];
+      // const selectedControls = [...this.selectedControls];
+      // this.selectedControls = [...selectedControls.splice(0, (event.currentIndex - 1)), control,
+      //     ...selectedControls.splice(event.currentIndex, selectedControls.length)];
+      this.createForm();
+    } else {
+      moveItemInArray(this.selectedControls, event.previousIndex, event.currentIndex);
+      // this.inputFormGroup = this.formBuilder.group({});
       this.createForm();
     }
   }
@@ -74,6 +97,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
       if (!this.inputFormGroup.get(a.propertyName)) {
         this.inputFormGroup.addControl(a.propertyName, new FormControl());
       }
+      this.inputFormGroup.setControl(a.propertyName, this.inputFormGroup.get(a.propertyName));
     });
     setTimeout(() => {
       this.cdr.detectChanges();
