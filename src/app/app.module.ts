@@ -20,6 +20,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 import { MatFormGeneratorComponent } from './mat-form-generator/mat-form-generator.component';
@@ -54,7 +56,9 @@ import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-dro
     DragDropModule,
     MatDialogModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCardModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

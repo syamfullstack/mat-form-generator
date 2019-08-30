@@ -5,7 +5,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 @Component({
   selector: 'app-material-form',
   templateUrl: './material-form.component.html',
-  styleUrls: ['./material-form.component.css']
+  styleUrls: ['./material-form.component.scss']
 })
 
 // export class MyErrorStateMatcher implements ErrorStateMatcher {
