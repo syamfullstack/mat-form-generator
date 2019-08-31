@@ -72,7 +72,7 @@ export class MatFormGeneratorComponent implements OnInit {
       }
     });
     setTimeout(() => {
-      this.cdr.detectChanges();
+      // this.cdr.detectChanges();
     });
   }
 

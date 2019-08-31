@@ -19,6 +19,16 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     openSettings: false
   },
   {
+    propertyName: 'textArea',
+    inputType: 'textArea',
+    displayName: null,
+    inputArray: null,
+    valueField: null,
+    displayField: null,
+    required: true,
+    openSettings: false
+  },
+  {
     propertyName: 'selectBox',
     inputType: 'selectBox',
     displayName: null,
@@ -57,6 +67,16 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     displayField: null,
     required: true,
     openSettings: false
+  },
+  {
+    propertyName: 'radioButton',
+    inputType: 'radioButton',
+    displayName: null,
+    inputArray: null,
+    valueField: null,
+    displayField: null,
+    required: true,
+    openSettings: false
   }];
 
 
@@ -71,7 +91,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   }
 
   drop1(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
+    // moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -118,6 +138,10 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     this.selectedControls[index] = this.selectedSettings;
     this.inputFormGroup = this.formBuilder.group({});
     this.createForm();
+  }
+
+  getInputArray(item) {
+    return [];
   }
 
 }
