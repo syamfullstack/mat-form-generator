@@ -33,8 +33,9 @@
                         <mat-label>{{data.displayName}}</mat-label>
                         <input matInput [formControl]="inputFormGroup.get(data.propertyName)">
                       </mat-form-field>
-                      <ng-container *ngTemplateOutlet="settingsButton; context: {$implicit: i}"></ng-container>
-                      <ng-container *ngTemplateOutlet="removeButton; context: {$implicit: data.propertyName, index: i}"></ng-container>
+                      <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data.propertyName, index: i}"></ng-container>
+                      <!-- <ng-container *ngTemplateOutlet="settingsButton; context: {$implicit: i}"></ng-container>
+                      <ng-container *ngTemplateOutlet="removeButton; context: {$implicit: data.propertyName, index: i}"></ng-container> -->
                       <!-- <button (click)="onSettingsClick(i)">settings</button> -->
                     </ng-container>
 
@@ -43,6 +44,9 @@
                             <mat-label>{{data.displayName}}</mat-label>
                             <textarea matInput [formControl]="inputFormGroup.get(data.propertyName)"></textarea>
                           </mat-form-field>
+                          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data.propertyName, index: i}"></ng-container>
+                          <!-- <ng-container *ngTemplateOutlet="settingsButton; context: {$implicit: i}"></ng-container>
+                          <ng-container *ngTemplateOutlet="removeButton; context: {$implicit: data.propertyName, index: i}"></ng-container> -->
                     </ng-container>
 
                     <ng-container *ngIf="data.inputType === 'selectBox'">
@@ -54,7 +58,7 @@
                               <mat-option value="option3">Option3</mat-option> -->
                             </mat-select>
                           </mat-form-field>
-                          <ng-container *ngTemplateOutlet="settingsButton; context: {$implicit: i}"></ng-container>
+                          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data.propertyName, index: i}"></ng-container>
                     </ng-container>
 
                     <ng-container *ngIf="data.inputType === 'dateBox'">
@@ -64,14 +68,17 @@
                             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                             <mat-datepicker #picker1></mat-datepicker>
                           </mat-form-field>
+                          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data.propertyName, index: i}"></ng-container>
                     </ng-container>
                     <ng-container *ngIf="data.inputType === 'radioButton'">
                         <div class="pt-3">
                             <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get(data.propertyName)" cdkDrag>
-                              <mat-radio-button class="custom-radio-button" value="1">Option 1</mat-radio-button>
-                              <mat-radio-button class="custom-radio-button" value="2">Option 2</mat-radio-button>
+                              <mat-radio-button class="custom-radio-button" *ngFor="let option of data.inputArray"
+                                value="{{data.valueField ? option[data.valueField] : option}}">{{data.displayField ? option[data.displayField] : option}}</mat-radio-button>
+                              <!-- <mat-radio-button class="custom-radio-button" value="2">Option 2</mat-radio-button> -->
                             </mat-radio-group>
                           </div>
+                          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data.propertyName, index: i}"></ng-container>
                     </ng-container>
 
                     <ng-container *ngIf="data.inputType === 'toggle'">
@@ -80,11 +87,28 @@
                                 {{data.displayName}}
                             </mat-slide-toggle>
                           </div>
+                          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data.propertyName, index: i}"></ng-container>
                     </ng-container>
                     <ng-container *ngIf="data.inputType === 'checkBox'">
                         <div class="pt-3" cdkDrag>
                             <mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get(data.propertyName)">{{data.displayName}}</mat-checkbox>
                           </div>
+                          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data.propertyName, index: i}"></ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="data.inputType === 'multiSelect'" >
+                        <mat-form-field class="custom-form-field" appearance="outline">
+                            <mat-select placeholder="{{data.displayName}}" [formControl]="inputFormGroup.get(data.propertyName)" multiple>
+                              <mat-select-trigger>
+                                {{inputFormGroup.get(data.propertyName).value ? inputFormGroup.get(data.propertyName).value[0] : ''}}
+                                <span *ngIf="inputFormGroup.get(data.propertyName).value?.length > 1" class="example-additional-selection">
+                                  (+{{inputFormGroup.get(data.propertyName).value.length - 1}} {{inputFormGroup.get(data.propertyName).value?.length === 2 ? 'other' : 'others'}})
+                                </span>
+                              </mat-select-trigger>
+                              <mat-option *ngFor="let option of data.inputArray" [value]="data.valueField ? option[data.valueField] : option">
+                                {{data.displayField ? option[data.displayField] : option}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
                     </ng-container>
               </ng-container>
           </ng-container>
@@ -93,12 +117,16 @@
     </div>
     <pre>{{ inputFormGroup?.value | json }}</pre>
  <ng-container #settings></ng-container>
- <ng-template #settingsButton let-i>
+ <ng-template #settingsAndRemove let-propertyName let-index="index">
+    <button (click)="onSettingsClick(index)">settings</button>
+    <button (click)="removeControl(propertyName, index)">remove</button>
+ </ng-template>
+ <!-- <ng-template #settingsButton let-i>
     <button (click)="onSettingsClick(i)">settings</button>
  </ng-template>
  <ng-template #removeButton let-propertyName let-index>
     <button (click)="removeControl(propertyName, index)">remove</button>
- </ng-template>
+ </ng-template> -->
 
 
  <!-- <form class="example-form" [formGroup]="inputFormGroup" *ngIf="inputFormGroup">

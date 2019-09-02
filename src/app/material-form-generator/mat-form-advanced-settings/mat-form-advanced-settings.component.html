@@ -9,7 +9,7 @@
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Property Name" [formControl]="settingsFormGroup.controls.propertyName">
             </mat-form-field>
-            <ng-container *ngIf="selectedSettings.inputType === 'selectBox'">
+            <ng-container *ngIf="selectedSettings.inputType === 'selectBox' || selectedSettings.inputType === 'radioButton'">
                 <mat-form-field class="custom-form-field" appearance="outline">
                     <mat-label>Input Array</mat-label>
                     <textarea matInput [formControl]="settingsFormGroup.controls.inputArray"></textarea>

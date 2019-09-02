@@ -62,7 +62,17 @@ export const getControls = () => ([{
     propertyName: 'radioButton',
     inputType: 'radioButton',
     displayName: null,
-    inputArray: null,
+    inputArray: ['Option 1', 'Option 2'],
+    valueField: null,
+    displayField: null,
+    required: true,
+    openSettings: false
+  },
+  {
+    propertyName: 'multiSelect',
+    inputType: 'multiSelect',
+    displayName: null,
+    inputArray: ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'],
     valueField: null,
     displayField: null,
     required: true,
