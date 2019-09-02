@@ -4,64 +4,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MaterialFormComponent } from './material-form/material-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableModule } from '@angular/material/table';
-import { MatDialogModule } from '@angular/material/dialog';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import {MatListModule} from '@angular/material/list';
 
 
-
-import { MatFormGeneratorComponent } from './mat-form-generator/mat-form-generator.component';
-import { CommonModule } from '@angular/common';
-import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-drop/mat-form-generator-drag-drop.component';
-
+import { MaterialFormGeneratorModule } from './material-form-generator/material-generator.module';
+import { MatFormAdvancedSettingsComponent } from './material-form-generator/mat-form-advanced-settings/mat-form-advanced-settings.component';
 @NgModule({
   declarations: [
     AppComponent,
-    MaterialFormComponent,
-    MatFormGeneratorComponent,
-    MatFormGeneratorDragDropComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    CommonModule,
-    FormsModule,
-    // Material components
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    // MatMomentDateModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatSlideToggleModule,
-    MatCheckboxModule,
-    MatTableModule,
-    DragDropModule,
-    MatDialogModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDividerModule,
-    MatListModule
+    MaterialFormGeneratorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
