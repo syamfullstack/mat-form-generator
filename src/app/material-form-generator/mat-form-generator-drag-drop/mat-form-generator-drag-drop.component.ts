@@ -1,7 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, TemplateRef, ViewContainerRef, ComponentFactoryResolver, Injector, ReflectiveInjector } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 import { MatFormAdvancedSettingsComponent } from '../mat-form-advanced-settings/mat-form-advanced-settings.component';
 import { getCustomInjector } from '../utilities/custom-injector';
 import { AdvancedSettingsAction } from '../model/advanced-settings.model';
@@ -16,19 +15,19 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   controls: any;
   selectedControls: any[] = [];
   inputFormGroup: FormGroup;
-  action: AdvancedSettingsAction = { 
+  action: AdvancedSettingsAction = {
     ok: (settings, index) => this.applySettings(settings, index),
     cancel: (index) => this.closeSettingsModal(index)
-   };
+  };
 
-  // @ViewChild('settings', { static: true }) settingsRef: TemplateRef<any>;
+  isFormArray = false;
+  formArrayName: string;
+  selectedControls1: any = {};
+
   @ViewChild('settings', { static: true, read: ViewContainerRef }) settings: ViewContainerRef;
-  /*
-    1. Create settings component and its formgroup, validation
-  */
 
   constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef,
-    private componentFactoryResolver: ComponentFactoryResolver) { }
+              private componentFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
     this.controls = getControls();
@@ -42,6 +41,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
         (+this.selectedControls.filter(a => a.inputType === control.inputType).length + 1);
       control.displayName = control.propertyName;
       this.selectedControls = [...this.selectedControls, control];
+      this.selectedControls1[control.propertyName] = control;
       // const selectedControls = [...this.selectedControls];
       // this.selectedControls = [...selectedControls.splice(0, (event.currentIndex - 1)), control,
       //     ...selectedControls.splice(event.currentIndex, selectedControls.length)];
@@ -93,6 +93,72 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   removeControl(propertyName, index) {
     this.inputFormGroup.removeControl(propertyName);
     this.selectedControls = this.selectedControls.filter((a, i) => i !== index);
+  }
+
+  createFormArray() {
+    const selectedFormArrayControls = this.selectedControls.filter(a => a.selected);
+    if (this.isFormArray) {
+      this.isFormArray = false;
+      let formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
+      if (!formArray) {
+        this.selectedControls1[this.formArrayName] = {
+          displayName: this.formArrayName,
+          formArrayName: this.formArrayName,
+          controls: {}
+        };
+        this.inputFormGroup.addControl(this.formArrayName, new FormArray([]));
+        formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
+      }
+      const formGroup = this.formBuilder.group({});
+      let controls = {};
+      selectedFormArrayControls.forEach(a => {
+        this.inputFormGroup.removeControl(a.propertyName);
+        // this.selectedControls1[this.formArrayName].controls = {
+        //   ...this.selectedControls1[this.formArrayName].controls,
+        //   [a.propertyName]: this.selectedControls.filter(a => a.propertyName === a.propertyName)
+        // };
+        controls = {
+          ...controls,
+          [a.propertyName]: this.selectedControls1[a.propertyName]
+        };
+        delete this.selectedControls1[a.propertyName];
+        this.selectedControls = this.selectedControls.filter(a => a.propertyName !== a.propertyName);
+        formGroup.addControl(a.propertyName, new FormControl());
+      });
+      this.selectedControls1[this.formArrayName].controls = [controls];
+      formArray.push(formGroup);
+
+      // this.isFormArray = false;
+      // let formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
+      // if (!formArray) {
+      //   this.inputFormGroup.addControl(this.formArrayName, new FormArray([]));
+      //   formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
+      // }
+      // const formGroup = this.formBuilder.group({});
+      // selectedFormArrayControls.forEach(a => {
+      //   this.inputFormGroup.removeControl(a.propertyName);
+      //   this.selectedControls = this.selectedControls.filter(a => a.propertyName !== a.propertyName);
+      //   formGroup.addControl(a.propertyName, new FormControl());
+      // });
+      // formArray.push(formGroup);
+    } else if (!this.isFormArray && selectedFormArrayControls.length) {
+      this.isFormArray = true;
+    }
+  }
+
+  getObjectValuesOfControls(controls) {
+    return Object.values(controls);
+  }
+
+  getFormArray(i, data) {
+    this;
+    debugger;
+    const dat = (this.inputFormGroup.get(data.formArrayName) as FormArray).at(i);
+    return (this.inputFormGroup.get(data.formArrayName) as FormArray).at(i);
+  }
+
+  deleteControls() {
+
   }
 
 }

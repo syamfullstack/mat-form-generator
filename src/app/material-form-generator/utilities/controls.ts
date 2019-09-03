@@ -6,7 +6,8 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   },
   {
     propertyName: 'textArea',
@@ -16,7 +17,8 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   },
   {
     propertyName: 'selectBox',
@@ -26,7 +28,8 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   },
   {
     propertyName: 'datebox',
@@ -36,7 +39,8 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   },
   {
     propertyName: 'toggle',
@@ -46,7 +50,8 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   },
   {
     propertyName: 'checkBox',
@@ -56,7 +61,8 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   },
   {
     propertyName: 'radioButton',
@@ -66,7 +72,8 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   },
   {
     propertyName: 'multiSelect',
@@ -76,6 +83,7 @@ export const getControls = () => ([{
     valueField: null,
     displayField: null,
     required: true,
-    openSettings: false
+    openSettings: false,
+    selected: false
   }]);
 
