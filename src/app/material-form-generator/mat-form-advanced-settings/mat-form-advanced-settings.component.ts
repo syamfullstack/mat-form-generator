@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, TemplateRef, OnChanges, SimpleChange, SimpleChanges, AfterViewInit, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, FormArrayName } from '@angular/forms';
 
 @Component({
   selector: 'app-mat-form-advanced-settings',
@@ -9,7 +9,8 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 })
 export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
   @Input() selectedSettings: any;
-  @Input() index: any;
+  @Input() formArrayName: any;
+  // @Input() index: any;
 
   settingsFormGroup: FormGroup;
 
@@ -19,13 +20,13 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.createForm();
-    
+
   }
 
   ngAfterViewInit() {
     this.dialog.open(this.settingsRef, {
       width: '400px',
-      data: {index: this.index}
+      data: { index: null }
     });
   }
 
@@ -47,7 +48,7 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  inputArrayValidator(control: AbstractControl): {[key: string]: string} {
+  inputArrayValidator(control: AbstractControl): { [key: string]: string } {
     try {
       const jsonObj = JSON.parse((control.value || '').trim());
     }
@@ -59,7 +60,7 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
     return null;
   }
 
-  valueFieldValidator(control: AbstractControl): {[key: string]: string} {
+  valueFieldValidator(control: AbstractControl): { [key: string]: string } {
     try {
       const jsonObj = JSON.parse((this.settingsFormGroup.value.inputArray || '').trim());
       if (jsonObj && jsonObj.length && jsonObj[0] && jsonObj[0][control.value]) {
@@ -76,8 +77,8 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
       }
     }
   }
-  
-  displayFieldValidator(control: AbstractControl): {[key: string]: string} {
+
+  displayFieldValidator(control: AbstractControl): { [key: string]: string } {
     try {
       const jsonObj = JSON.parse((this.settingsFormGroup.value.inputArray || '').trim());
       if (jsonObj && jsonObj.length && jsonObj[0] && jsonObj[0][control.value]) {
@@ -87,8 +88,7 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
           message: 'Invalid text field'
         }
       }
-    }
-    catch (ex) {
+    } catch (ex) {
       return {
         message: 'Invalid text field'
       }
@@ -97,13 +97,15 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
 
 
 
-  closeSettings(index) {
+  closeSettings() {
     this.dialog.closeAll();
-    this.action.cancel(index);
+    this.action.cancel(this.selectedSettings.propertyName, this.formArrayName);
   }
 
-  applySettings(index) {
-    this.action.ok(this.settingsFormGroup.value, index);
+  applySettings() {
+    // this.selectedSettings = { ...this.settingsFormGroup.value, inputArray: JSON.parse(this.settingsFormGroup.value.inputArray) };
+    this.action.ok({ ...this.settingsFormGroup.value, inputArray: JSON.parse(this.settingsFormGroup.value.inputArray) },
+      this.selectedSettings.propertyName, this.formArrayName);
     this.dialog.closeAll();
   }
 

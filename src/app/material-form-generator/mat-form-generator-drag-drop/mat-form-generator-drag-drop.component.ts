@@ -16,7 +16,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   selectedControls: any[] = [];
   inputFormGroup: FormGroup;
   action: AdvancedSettingsAction = {
-    ok: (settings, index) => this.applySettings(settings, index),
+    ok: (settings, propertyName, formArryName) => this.applySettings(settings, propertyName, formArryName),
     cancel: (index) => this.closeSettingsModal(index)
   };
 
@@ -27,7 +27,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   @ViewChild('settings', { static: true, read: ViewContainerRef }) settings: ViewContainerRef;
 
   constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef,
-              private componentFactoryResolver: ComponentFactoryResolver) { }
+    private componentFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
     this.controls = getControls();
@@ -53,29 +53,43 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   }
 
   createForm() {
-    this.selectedControls.forEach((a, i) => {
-      if (!this.inputFormGroup.get(a.propertyName)) {
-        this.inputFormGroup.addControl(a.propertyName, new FormControl());
+    // this.selectedControls.forEach((a, i) => {
+    //   if (!this.inputFormGroup.get(a.propertyName)) {
+    //     this.inputFormGroup.addControl(a.propertyName, new FormControl());
+    //   }
+    //   this.inputFormGroup.setControl(a.propertyName, this.inputFormGroup.get(a.propertyName));
+    // });
+    // setTimeout(() => {
+    //   this.cdr.detectChanges();
+    // });
+    const controls = Object.values(this.selectedControls1);
+    controls.forEach((control: any) => {
+      if (control.formArrayName) {
+        
+      } else {
+        if (!this.inputFormGroup.get(control.propertyName)) {
+          this.inputFormGroup.addControl(control.propertyName, new FormControl());
+        }
+        this.inputFormGroup.setControl(control.propertyName, this.inputFormGroup.get(control.propertyName));
       }
-      this.inputFormGroup.setControl(a.propertyName, this.inputFormGroup.get(a.propertyName));
-    });
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    });
+    })
   }
 
-  onSettingsClick(index) {
-    const selectedSettings = { ...this.controls[index], ...this.selectedControls[index] };
-    this.selectedControls[index].openSettings = true;
-    this.openSettingsModal(index, selectedSettings);
+  onSettingsClick(data, formArrayName) {
+    // const selectedSettings = { ...this.controls[index], ...this.selectedControls[index] };
+    // this.selectedControls[index].openSettings = true;
+    // this.openSettingsModal(index, selectedSettings);
+    // data.openSettings = true;
+    this.openSettingsModal(formArrayName, data);
   }
 
-  openSettingsModal(index, selectedSettings) {
+  openSettingsModal(formArrayName, selectedSettings) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(MatFormAdvancedSettingsComponent);
     this.settings.clear();
     const componentRef = this.settings.createComponent(componentFactory, 0, getCustomInjector(this.action));
-    (<MatFormAdvancedSettingsComponent>componentRef.instance).index = index;
-    (<MatFormAdvancedSettingsComponent>componentRef.instance).selectedSettings = selectedSettings;
+    // (componentRef.instance as MatFormAdvancedSettingsComponent).index = index;
+    (componentRef.instance as MatFormAdvancedSettingsComponent).formArrayName = formArrayName;
+    (componentRef.instance as MatFormAdvancedSettingsComponent).selectedSettings = selectedSettings;
   }
 
   closeSettingsModal(index) {
@@ -83,10 +97,44 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     this.settings.clear();
   }
 
-  applySettings(settings, index) {
-    this.selectedControls[index] = { ...settings, inputArray: JSON.parse(settings.inputArray) };
-    this.inputFormGroup = this.formBuilder.group({});
-    this.createForm();
+  applySettings(settings, propertyName, formArryName) {
+    // this.selectedControls[index] = { ...settings, inputArray: JSON.parse(settings.inputArray) };
+    // this.inputFormGroup = this.formBuilder.group({});
+    // this.createForm();
+    // this.settings.clear();
+    // settings = { ...settings, inputArray: JSON.parse(settings.inputArray) };
+    if (formArryName) {
+      debugger;
+      const controls = [];
+      (this.selectedControls1[formArryName].controls).forEach(controlData => {
+        const control = {};
+        Object.keys(controlData).forEach((key => {
+          if (key !== propertyName) {
+            control[key] = controlData[key]
+          } else {
+            control[propertyName] = settings;
+          }
+        }));
+        controls.push(control);
+      });
+      
+      this.selectedControls1[formArryName].controls = controls;
+
+    } else {
+      const controls = {};
+      this.inputFormGroup = this.formBuilder.group({});
+      Object.keys(this.selectedControls1).forEach((key => {
+        if (key !== propertyName) {
+          controls[key] = this.selectedControls1[key]
+        } else {
+          controls[propertyName] = settings;
+        }
+      }));
+      this.selectedControls1 = controls;
+      // delete this.selectedControls1[propertyName];
+      // this.selectedControls1[settings.propertyName] = settings;
+      this.createForm();
+    }
     this.settings.clear();
   }
 
@@ -97,6 +145,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 
   createFormArray() {
     const selectedFormArrayControls = this.selectedControls.filter(a => a.selected);
+    const selectedFormArrayControls1 = (Object.values(this.selectedControls1)).filter((a: any) => a.selected);
     if (this.isFormArray) {
       this.isFormArray = false;
       let formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
@@ -111,7 +160,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
       }
       const formGroup = this.formBuilder.group({});
       let controls = {};
-      selectedFormArrayControls.forEach(a => {
+      selectedFormArrayControls1.forEach((a: any) => {
         this.inputFormGroup.removeControl(a.propertyName);
         // this.selectedControls1[this.formArrayName].controls = {
         //   ...this.selectedControls1[this.formArrayName].controls,
@@ -141,7 +190,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
       //   formGroup.addControl(a.propertyName, new FormControl());
       // });
       // formArray.push(formGroup);
-    } else if (!this.isFormArray && selectedFormArrayControls.length) {
+    } else if (!this.isFormArray && selectedFormArrayControls1.length) {
       this.isFormArray = true;
     }
   }
