@@ -1,6 +1,5 @@
 <ng-template #settings let-data>
         <ng-container *ngIf="selectedSettings">
-     
           <h2 mat-dialog-title>Settings</h2>
           <mat-dialog-content>
              <mat-form-field class="example-full-width">
@@ -9,7 +8,7 @@
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Property Name" [formControl]="settingsFormGroup.controls.propertyName">
             </mat-form-field>
-            <ng-container *ngIf="selectedSettings.inputType === 'selectBox' || selectedSettings.inputType === 'radioButton'">
+            <ng-container *ngIf="selectedSettings.inputType === 'selectBox' || selectedSettings.inputType === 'radioButton' || selectedSettings.inputType === 'multiSelect'">
                 <mat-form-field class="custom-form-field" appearance="outline">
                     <mat-label>Input Array</mat-label>
                     <textarea matInput [formControl]="settingsFormGroup.controls.inputArray"></textarea>
