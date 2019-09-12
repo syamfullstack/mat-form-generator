@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, TemplateRef, OnChanges, SimpleChange, SimpleChanges, AfterViewInit, Inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, TemplateRef, AfterViewInit, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators, AbstractControl, FormArrayName } from '@angular/forms';
 
@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, FormArrayName } fr
 export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
   @Input() selectedSettings: any;
   @Input() formArrayName: any;
+  @Input() formGroupName: any;
   // @Input() index: any;
 
   settingsFormGroup: FormGroup;
@@ -105,7 +106,7 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
   applySettings() {
     // this.selectedSettings = { ...this.settingsFormGroup.value, inputArray: JSON.parse(this.settingsFormGroup.value.inputArray) };
     this.action.ok({ ...this.settingsFormGroup.value, inputArray: JSON.parse(this.settingsFormGroup.value.inputArray) },
-      this.selectedSettings.propertyName, this.formArrayName);
+      this.selectedSettings.propertyName, this.formGroupName, this.formArrayName);
     this.dialog.closeAll();
   }
 

@@ -21,32 +21,41 @@
             <!-- <pre>{{data | json}}</pre> -->
             <ng-container *ngTemplateOutlet="formArrayDisplay; context:{$implicit: data, formArrayName: data.formArrayName}"></ng-container>
           </ng-container>
+          <ng-container *ngIf="data.formGroupName">
+            <!-- <pre>{{data | json}}</pre> -->
+            <ng-container *ngTemplateOutlet="formGroupDisplay; context:{$implicit: data, formArrayName: null, formGroupName: data.formGroupName}"></ng-container>
+          </ng-container>
         </ng-container>
 
         <!-- Here is the content -->
         </mat-card-content>
     </mat-card>
     <div *ngIf="selectedControls?.length">
-      <button (click)="createFormArray()">Create FormArray</button>
+      <button (click)="createFormArray()" *ngIf="!isFormGroup">Create FormArray</button>
+      <button (click)="createFormGroup()" *ngIf="!isFormArray">Create FormGroup</button>
       <button (click)="deleteControls()">Delete</button>
       <mat-form-field class="custom-form-field" appearance="outline" *ngIf="isFormArray">
         <mat-label>FormArray Name</mat-label>
         <input matInput [(ngModel)]="formArrayName">
+      </mat-form-field>
+      <mat-form-field class="custom-form-field" appearance="outline" *ngIf="isFormGroup">
+        <mat-label>FormGroup Name</mat-label>
+        <input matInput [(ngModel)]="formGroupName">
       </mat-form-field>
     </div>
   </div>
   <pre>{{ inputFormGroup?.value | json }}</pre>
   <pre>{{ selectedControls1 | json }}</pre>
   <br />
-  <ng-template #controlsDisplay let-data let-inputFormGroup="inputFormGroup" let-formArrayName="formArrayName">
+  <ng-template #controlsDisplay let-data let-inputFormGroup="inputFormGroup" let-formArrayName="formArrayName" let-formGroupName="formGroupName">
     <ng-container *ngIf="inputFormGroup || 1===1">
       <ng-container *ngIf="data.inputType === 'textBox'">
-          <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+          <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
           <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
             <mat-label>{{data.displayName}}</mat-label>
             <input matInput [formControl]="inputFormGroup.get(data.propertyName)">
           </mat-form-field>
-          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}">
+          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}">
           </ng-container>
         </ng-container>
 
@@ -56,7 +65,7 @@
                 <mat-label>{{data.displayName}}</mat-label>
                 <textarea matInput [formControl]="inputFormGroup.get(data.propertyName)"></textarea>
               </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}"></ng-container>
+              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName,formArrayName:formArrayName}"></ng-container>
         </ng-container>
 
         <ng-container *ngIf="data.inputType === 'selectBox'">
@@ -68,7 +77,7 @@
           
                 </mat-select>
               </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}"></ng-container>
+              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data,formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
         </ng-container>
 
         <ng-container *ngIf="data.inputType === 'dateBox'">
@@ -79,7 +88,7 @@
                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
               </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}"></ng-container>
+              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data,formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
         </ng-container>
         <ng-container *ngIf="data.inputType === 'radioButton'">
             <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
@@ -89,7 +98,7 @@
                     value="{{data.valueField ? option[data.valueField] : option}}">{{data.displayField ? option[data.displayField] : option}}</mat-radio-button>
                   </mat-radio-group>
               </div>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}"></ng-container>
+              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
         </ng-container>
 
         <ng-container *ngIf="data.inputType === 'toggle'">
@@ -99,14 +108,14 @@
                     {{data.displayName}}
                 </mat-slide-toggle>
               </div>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}"></ng-container>
+              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
         </ng-container>
         <ng-container *ngIf="data.inputType === 'checkBox'">
             <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
             <div class="pt-3" cdkDrag>
                 <mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get(data.propertyName)">{{data.displayName}}</mat-checkbox>
               </div>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}"></ng-container>
+              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
         </ng-container>
         <ng-container *ngIf="data.inputType === 'multiSelect'" >
             <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
@@ -123,7 +132,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formArrayName:formArrayName}"></ng-container>
+              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
         </ng-container>
     </ng-container>
   </ng-template>
@@ -137,10 +146,18 @@
       </ng-container>
     </ng-container>
   </ng-template>
+  <ng-template #formGroupDisplay let-data let-formArrayName="formArrayName" let-formGroupName="formGroupName">
+    FormGroup Name - {{ formGroupName }}
+    <ng-container *ngFor="let control of getObjectValuesOfControls(data.controls); let j=index">
+      <ng-container *ngTemplateOutlet="controlsDisplay; context:{$implicit: control,
+        inputFormGroup: this.inputFormGroup.get(data.formGroupName), formArrayName: formArrayName, formGroupName: data.formGroupName}">
+      </ng-container>
+    </ng-container>
+  </ng-template>
   
   <ng-container #settings></ng-container>
-  <ng-template #settingsAndRemove let-data let-formArrayName="formArrayName">
-    <button (click)="onSettingsClick(data, formArrayName)">settings</button>
+  <ng-template #settingsAndRemove let-data let-formGroupName="formGroupName" let-formArrayName="formArrayName">
+    <button (click)="onSettingsClick(data, formGroupName, formArrayName)">settings</button>
     <!-- <button (click)="removeControl(propertyName, index)">remove</button> -->
   </ng-template>
 

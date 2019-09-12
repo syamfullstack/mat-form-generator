@@ -16,12 +16,14 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   selectedControls: any[] = [];
   inputFormGroup: FormGroup;
   action: AdvancedSettingsAction = {
-    ok: (settings, propertyName, formArryName) => this.applySettings(settings, propertyName, formArryName),
+    ok: (settings, propertyName, formGroupName, formArryName) => this.applySettings(settings, propertyName, formGroupName, formArryName),
     cancel: (index) => this.closeSettingsModal(index)
   };
 
   isFormArray = false;
+  isFormGroup = false;
   formArrayName: string;
+  formGroupName: string;
   selectedControls1: any = {};
 
   @ViewChild('settings', { static: true, read: ViewContainerRef }) settings: ViewContainerRef;
@@ -63,46 +65,79 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     //   this.cdr.detectChanges();
     // });
     const controls = Object.values(this.selectedControls1);
+    // controls.forEach((control: any) => {
+    //   if (control.formArrayName) {
+    //     let formArray = this.inputFormGroup.get(control.formArrayName);
+    //     if (!formArray || 1 === 1) {
+    //       this.inputFormGroup.addControl(control.formArrayName, this.formBuilder.array([]));
+    //       formArray = this.formBuilder.array(control.controls.map((item) => {
+    //         const formGroup = this.formBuilder.group({});
+    //         const keyValueControls = Object.values(item);
+    //         keyValueControls.forEach((ctrl: any) => {
+    //           formGroup.addControl(ctrl.propertyName, new FormControl());
+    //         });
+    //         return formGroup;
+    //       }));
+    //       this.inputFormGroup.setControl(control.formArrayName, formArray);
+    //     } else {
+    //       this.inputFormGroup.setControl(control.formArrayName, this.inputFormGroup.get(control.formArrayName));
+    //     }
+    //   } else {
+    //     if (!this.inputFormGroup.get(control.propertyName)) {
+    //       this.inputFormGroup.addControl(control.propertyName, new FormControl());
+    //     }
+    //     this.inputFormGroup.setControl(control.propertyName, this.inputFormGroup.get(control.propertyName));
+    //   }
+    // });
+    this.inputFormGroup = this.formBuilder.group({});
     controls.forEach((control: any) => {
-      if (control.formArrayName) {
-        let formArray = this.inputFormGroup.get(control.formArrayName);
-        if (!formArray || 1 === 1) {
-          this.inputFormGroup.addControl(control.formArrayName, this.formBuilder.array([]));
-          formArray = this.formBuilder.array(control.controls.map((item) => {
-            const formGroup = this.formBuilder.group({});
-            const keyValueControls = Object.values(item);
-            keyValueControls.forEach((ctrl: any) => {
-              formGroup.addControl(ctrl.propertyName, new FormControl());
-            });
-            return formGroup;
-          }));
-          this.inputFormGroup.setControl(control.formArrayName, formArray);
-        } else {
-          this.inputFormGroup.setControl(control.formArrayName, this.inputFormGroup.get(control.formArrayName));
-        }
+      if (control.formGroupName) {
+        // write a common fn
+        const formGroup = this.formBuilder.group({});
+        (this.getObjectValuesOfControls(control.controls)).forEach((control: any) => {
+          formGroup.addControl(control.propertyName, new FormControl());
+        });
+        this.inputFormGroup.addControl(control.formGroupName, formGroup);
+      } else if (control.formArrayName) {
+        const formArray = this.formBuilder.array([]);
+        
+        control.controls.forEach((formArrayControls: any) => {
+           // write a common fn
+           const formGroup = this.formBuilder.group({});
+           (this.getObjectValuesOfControls(formArrayControls)).forEach((control: any) => {
+            formGroup.addControl(control.propertyName, new FormControl());
+          });
+          formArray.push(formGroup);
+          //  formArrayControls.controls.forEach((control: any) => {
+          //   const formGroup = this.formBuilder.group({});
+          //   (this.getObjectValuesOfControls(formArrayControls.controls)).forEach((control: any) => {
+          //     formGroup.addControl(control.propertyName, new FormControl());
+          //   });
+          //   formArray.push(formGroup);
+          // });
+        });
+        this.inputFormGroup.addControl(control.formArrayName, formArray);
       } else {
-        if (!this.inputFormGroup.get(control.propertyName)) {
-          this.inputFormGroup.addControl(control.propertyName, new FormControl());
-        }
-        this.inputFormGroup.setControl(control.propertyName, this.inputFormGroup.get(control.propertyName));
+        this.inputFormGroup.addControl(control.propertyName, new FormControl());
       }
-    })
+    });
   }
 
-  onSettingsClick(data, formArrayName) {
+  onSettingsClick(data, formGroupName, formArrayName) {
     // const selectedSettings = { ...this.controls[index], ...this.selectedControls[index] };
     // this.selectedControls[index].openSettings = true;
     // this.openSettingsModal(index, selectedSettings);
     // data.openSettings = true;
-    this.openSettingsModal(formArrayName, data);
+    this.openSettingsModal(formGroupName, formArrayName, data);
   }
 
-  openSettingsModal(formArrayName, selectedSettings) {
+  openSettingsModal(formGroupName, formArrayName, selectedSettings) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(MatFormAdvancedSettingsComponent);
     this.settings.clear();
     const componentRef = this.settings.createComponent(componentFactory, 0, getCustomInjector(this.action));
     // (componentRef.instance as MatFormAdvancedSettingsComponent).index = index;
     (componentRef.instance as MatFormAdvancedSettingsComponent).formArrayName = formArrayName;
+    (componentRef.instance as MatFormAdvancedSettingsComponent).formGroupName = formGroupName;
     (componentRef.instance as MatFormAdvancedSettingsComponent).selectedSettings = selectedSettings;
   }
 
@@ -111,7 +146,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     this.settings.clear();
   }
 
-  applySettings(settings, propertyName, formArryName) {
+  applySettings(settings, propertyName, formGroupName, formArryName) {
     // this.selectedControls[index] = { ...settings, inputArray: JSON.parse(settings.inputArray) };
     // this.inputFormGroup = this.formBuilder.group({});
     // this.createForm();
@@ -131,6 +166,28 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
         controls.push(control);
       });
       this.selectedControls1[formArryName].controls = controls;
+
+    } else if (formGroupName) {
+      // this.selectedControls1[formGroupName].
+      let control = {};
+      Object.keys(this.selectedControls1[formGroupName].controls).forEach(((key, i) => {
+        if (key !== propertyName) {
+          // control[key] = this.selectedControls1[formGroupName].controls[key]
+          control = {
+            ...control,
+            [key]: this.selectedControls1[formGroupName].controls[key],
+            // sortPosition: i
+          };
+        } else {
+          control = {
+            ...control,
+            [settings.propertyName]: settings,
+            // sortPosition: i
+          };
+          // control[settings.propertyName] = settings;
+        }
+      }));
+      this.selectedControls1[formGroupName].controls = control;
 
     } else {
       const controls = {};
@@ -204,6 +261,37 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
       // formArray.push(formGroup);
     } else if (!this.isFormArray && selectedFormArrayControls1.length) {
       this.isFormArray = true;
+    }
+  }
+
+  createFormGroup() {
+    if (this.isFormGroup) {
+      this.isFormGroup = false;
+      let formGroup = this.inputFormGroup.get(this.formGroupName) as FormGroup;
+      const selectedFormArrayControls1 = (Object.values(this.selectedControls1)).filter((a: any) => a.selected);
+      if (!formGroup) {
+        this.selectedControls1[this.formGroupName] = {
+          displayName: this.formGroupName,
+          formArrayName: null,
+          formGroupName: this.formGroupName,
+          controls: {}
+        };
+        this.inputFormGroup.addControl(this.formGroupName, this.formBuilder.group({}));
+        formGroup = this.inputFormGroup.get(this.formGroupName) as FormGroup;
+        let controls = {};
+        selectedFormArrayControls1.forEach((a: any) => {
+          this.inputFormGroup.removeControl(a.propertyName);
+          controls = {
+            ...controls,
+            [a.propertyName]: this.selectedControls1[a.propertyName]
+          };
+          delete this.selectedControls1[a.propertyName];
+          formGroup.addControl(a.propertyName, new FormControl());
+        });
+        this.selectedControls1[this.formGroupName].controls = controls;
+      }
+    } else {
+      this.isFormGroup = true;
     }
   }
 
