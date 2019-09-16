@@ -5,6 +5,7 @@ import { MatFormAdvancedSettingsComponent } from '../mat-form-advanced-settings/
 import { getCustomInjector } from '../utilities/custom-injector';
 import { AdvancedSettingsAction } from '../model/advanced-settings.model';
 import { getControls } from '../utilities/controls';
+import { GlobalFormSettingsComponent } from '../global-form-settings/global-form-settings.component';
 
 @Component({
   selector: 'app-mat-form-generator-drag-drop',
@@ -20,18 +21,44 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     cancel: (index) => this.closeSettingsModal(index)
   };
 
+  globalSettingsAction: any = {
+    ok: (settings) => this.applyGlobalSettings(settings),
+    cancel: () => {}
+  };
+
   isFormArray = false;
   isFormGroup = false;
   formArrayName: string;
   formGroupName: string;
   selectedControls1: any = {};
+  pages: any =  [{
+    pageName: 'Home',
+    formData: {
+      settings: {
+        formTitle: 'Material Form',
+        componentFileName: 'material-form',
+        componentName: 'MaterialForm',
+        buttons: {
+          okButtonTitle: 'Ok',
+          cancelButtonTitle: 'Cancel'
+        },
+      },
+      controls: {}
+    }
+  }];
+
+  selectedGlobalFormSettings: any;
+
 
   @ViewChild('settings', { static: true, read: ViewContainerRef }) settings: ViewContainerRef;
+  @ViewChild('globalSettings', { static: true, read: ViewContainerRef }) globalSettings: ViewContainerRef;
 
-  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef,
-    private componentFactoryResolver: ComponentFactoryResolver) { }
+  constructor(private formBuilder: FormBuilder, private componentFactoryResolver: ComponentFactoryResolver) {
+
+  }
 
   ngOnInit() {
+    this.selectedGlobalFormSettings = { ...this.pages[0].formData.settings };
     this.controls = getControls();
     this.inputFormGroup = this.formBuilder.group({});
   }
@@ -55,40 +82,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   }
 
   createForm() {
-    // this.selectedControls.forEach((a, i) => {
-    //   if (!this.inputFormGroup.get(a.propertyName)) {
-    //     this.inputFormGroup.addControl(a.propertyName, new FormControl());
-    //   }
-    //   this.inputFormGroup.setControl(a.propertyName, this.inputFormGroup.get(a.propertyName));
-    // });
-    // setTimeout(() => {
-    //   this.cdr.detectChanges();
-    // });
     const controls = Object.values(this.selectedControls1);
-    // controls.forEach((control: any) => {
-    //   if (control.formArrayName) {
-    //     let formArray = this.inputFormGroup.get(control.formArrayName);
-    //     if (!formArray || 1 === 1) {
-    //       this.inputFormGroup.addControl(control.formArrayName, this.formBuilder.array([]));
-    //       formArray = this.formBuilder.array(control.controls.map((item) => {
-    //         const formGroup = this.formBuilder.group({});
-    //         const keyValueControls = Object.values(item);
-    //         keyValueControls.forEach((ctrl: any) => {
-    //           formGroup.addControl(ctrl.propertyName, new FormControl());
-    //         });
-    //         return formGroup;
-    //       }));
-    //       this.inputFormGroup.setControl(control.formArrayName, formArray);
-    //     } else {
-    //       this.inputFormGroup.setControl(control.formArrayName, this.inputFormGroup.get(control.formArrayName));
-    //     }
-    //   } else {
-    //     if (!this.inputFormGroup.get(control.propertyName)) {
-    //       this.inputFormGroup.addControl(control.propertyName, new FormControl());
-    //     }
-    //     this.inputFormGroup.setControl(control.propertyName, this.inputFormGroup.get(control.propertyName));
-    //   }
-    // });
     this.inputFormGroup = this.formBuilder.group({});
     controls.forEach((control: any) => {
       if (control.formGroupName) {
@@ -100,21 +94,14 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
         this.inputFormGroup.addControl(control.formGroupName, formGroup);
       } else if (control.formArrayName) {
         const formArray = this.formBuilder.array([]);
-        
+
         control.controls.forEach((formArrayControls: any) => {
-           // write a common fn
-           const formGroup = this.formBuilder.group({});
-           (this.getObjectValuesOfControls(formArrayControls)).forEach((control: any) => {
+          // write a common fn
+          const formGroup = this.formBuilder.group({});
+          (this.getObjectValuesOfControls(formArrayControls)).forEach((control: any) => {
             formGroup.addControl(control.propertyName, new FormControl());
           });
           formArray.push(formGroup);
-          //  formArrayControls.controls.forEach((control: any) => {
-          //   const formGroup = this.formBuilder.group({});
-          //   (this.getObjectValuesOfControls(formArrayControls.controls)).forEach((control: any) => {
-          //     formGroup.addControl(control.propertyName, new FormControl());
-          //   });
-          //   formArray.push(formGroup);
-          // });
         });
         this.inputFormGroup.addControl(control.formArrayName, formArray);
       } else {
@@ -124,10 +111,6 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   }
 
   onSettingsClick(data, formGroupName, formArrayName) {
-    // const selectedSettings = { ...this.controls[index], ...this.selectedControls[index] };
-    // this.selectedControls[index].openSettings = true;
-    // this.openSettingsModal(index, selectedSettings);
-    // data.openSettings = true;
     this.openSettingsModal(formGroupName, formArrayName, data);
   }
 
@@ -135,10 +118,20 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(MatFormAdvancedSettingsComponent);
     this.settings.clear();
     const componentRef = this.settings.createComponent(componentFactory, 0, getCustomInjector(this.action));
-    // (componentRef.instance as MatFormAdvancedSettingsComponent).index = index;
     (componentRef.instance as MatFormAdvancedSettingsComponent).formArrayName = formArrayName;
     (componentRef.instance as MatFormAdvancedSettingsComponent).formGroupName = formGroupName;
     (componentRef.instance as MatFormAdvancedSettingsComponent).selectedSettings = selectedSettings;
+  }
+
+  openGlobalFormSettings() {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(GlobalFormSettingsComponent);
+    this.settings.clear();
+    const componentRef = this.settings.createComponent(componentFactory, 0, getCustomInjector(this.globalSettingsAction));
+    (componentRef.instance as GlobalFormSettingsComponent).globalSettings = { ...this.selectedGlobalFormSettings };
+  }
+
+  applyGlobalSettings(settings) {
+    this.pages[0].formData.settings = this.selectedGlobalFormSettings = { ...settings };
   }
 
   closeSettingsModal(index) {
@@ -245,20 +238,6 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
       });
       this.selectedControls1[this.formArrayName].controls = [controls];
       formArray.push(formGroup);
-
-      // this.isFormArray = false;
-      // let formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
-      // if (!formArray) {
-      //   this.inputFormGroup.addControl(this.formArrayName, new FormArray([]));
-      //   formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
-      // }
-      // const formGroup = this.formBuilder.group({});
-      // selectedFormArrayControls.forEach(a => {
-      //   this.inputFormGroup.removeControl(a.propertyName);
-      //   this.selectedControls = this.selectedControls.filter(a => a.propertyName !== a.propertyName);
-      //   formGroup.addControl(a.propertyName, new FormControl());
-      // });
-      // formArray.push(formGroup);
     } else if (!this.isFormArray && selectedFormArrayControls1.length) {
       this.isFormArray = true;
     }

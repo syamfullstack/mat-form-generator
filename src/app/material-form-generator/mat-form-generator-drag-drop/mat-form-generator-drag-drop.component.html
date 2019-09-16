@@ -10,26 +10,39 @@
   <div class="container pt-5 mb-5 mat-container col col-4" style="margin: 16px;">
     <mat-card class="mat-card-block">
       <mat-card-header>
-        <mat-card-title class="material-title">Material Form</mat-card-title>
+        <mat-card-title class="material-title">{{selectedGlobalFormSettings.formTitle}}</mat-card-title>
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content cdkDropList class="content-position" (cdkDropListDropped)="drop($event)">
 
         <ng-container *ngFor="let data of getObjectValuesOfControls(selectedControls1); let i= index">
-          <ng-container *ngTemplateOutlet="controlsDisplay; context:{$implicit: data, inputFormGroup: inputFormGroup, formArrayName: null}"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="controlsDisplay; context:{$implicit: data, inputFormGroup: inputFormGroup, formArrayName: null}">
+          </ng-container>
           <ng-container *ngIf="data.formArrayName">
             <!-- <pre>{{data | json}}</pre> -->
-            <ng-container *ngTemplateOutlet="formArrayDisplay; context:{$implicit: data, formArrayName: data.formArrayName}"></ng-container>
+            <ng-container
+              *ngTemplateOutlet="formArrayDisplay; context:{$implicit: data, formArrayName: data.formArrayName}">
+            </ng-container>
           </ng-container>
           <ng-container *ngIf="data.formGroupName">
             <!-- <pre>{{data | json}}</pre> -->
-            <ng-container *ngTemplateOutlet="formGroupDisplay; context:{$implicit: data, formArrayName: null, formGroupName: data.formGroupName}"></ng-container>
+            <ng-container
+              *ngTemplateOutlet="formGroupDisplay; context:{$implicit: data, formArrayName: null, formGroupName: data.formGroupName}">
+            </ng-container>
           </ng-container>
         </ng-container>
 
         <!-- Here is the content -->
-        </mat-card-content>
+      </mat-card-content>
+      <mat-card-footer >
+          <button mat-button>{{selectedGlobalFormSettings.buttons.cancelButtonTitle}}</button>
+          <button mat-button>{{selectedGlobalFormSettings.buttons.okButtonTitle}}</button>
+      </mat-card-footer>
     </mat-card>
+    <div>
+      <button (click)="openGlobalFormSettings()">Open Global Form Settings</button>
+    </div>
     <div *ngIf="selectedControls?.length">
       <button (click)="createFormArray()" *ngIf="!isFormGroup">Create FormArray</button>
       <button (click)="createFormGroup()" *ngIf="!isFormArray">Create FormGroup</button>
@@ -47,93 +60,116 @@
   <pre>{{ inputFormGroup?.value | json }}</pre>
   <pre>{{ selectedControls1 | json }}</pre>
   <br />
-  <ng-template #controlsDisplay let-data let-inputFormGroup="inputFormGroup" let-formArrayName="formArrayName" let-formGroupName="formGroupName">
+  <ng-template #controlsDisplay let-data let-inputFormGroup="inputFormGroup" let-formArrayName="formArrayName"
+    let-formGroupName="formGroupName">
     <ng-container *ngIf="inputFormGroup || 1===1">
       <ng-container *ngIf="data.inputType === 'textBox'">
-          <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
-          <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
-            <mat-label>{{data.displayName}}</mat-label>
-            <input matInput [formControl]="inputFormGroup.get(data.propertyName)">
-          </mat-form-field>
-          <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}">
-          </ng-container>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected">
+        </mat-checkbox>
+        <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
+          <mat-label>{{data.displayName}}</mat-label>
+          <input matInput [formControl]="inputFormGroup.get(data.propertyName)">
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}">
         </ng-container>
+      </ng-container>
 
-        <ng-container *ngIf="data.inputType === 'textArea'">
-            <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
-            <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
-                <mat-label>{{data.displayName}}</mat-label>
-                <textarea matInput [formControl]="inputFormGroup.get(data.propertyName)"></textarea>
-              </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName,formArrayName:formArrayName}"></ng-container>
+      <ng-container *ngIf="data.inputType === 'textArea'">
+        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
+          <mat-label>{{data.displayName}}</mat-label>
+          <textarea matInput [formControl]="inputFormGroup.get(data.propertyName)"></textarea>
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName,formArrayName:formArrayName}">
         </ng-container>
+      </ng-container>
 
-        <ng-container *ngIf="data.inputType === 'selectBox'">
-            <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
-            <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
-                <mat-label>{{data.displayName}}</mat-label>
-                <mat-select [formControl]="inputFormGroup.get(data.propertyName)">
-                  <mat-option *ngFor="let option of data.inputArray" value="{{option[data.valueField]}}">{{option[data.displayField]}}</mat-option>
-          
-                </mat-select>
-              </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data,formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
-        </ng-container>
+      <ng-container *ngIf="data.inputType === 'selectBox'">
+        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
+          <mat-label>{{data.displayName}}</mat-label>
+          <mat-select [formControl]="inputFormGroup.get(data.propertyName)">
+            <mat-option *ngFor="let option of data.inputArray" value="{{option[data.valueField]}}">
+              {{option[data.displayField]}}</mat-option>
 
-        <ng-container *ngIf="data.inputType === 'dateBox'">
-            <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
-            <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
-                <mat-label>{{data.displayName}}</mat-label>
-                <input matInput [matDatepicker]="picker1" [formControl]="inputFormGroup.get(data.propertyName)">
-                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-              </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data,formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
+          </mat-select>
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data,formGroupName: formGroupName, formArrayName:formArrayName}">
         </ng-container>
-        <ng-container *ngIf="data.inputType === 'radioButton'">
-            <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
-            <div class="pt-3" cdkDrag>
-                <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get(data.propertyName)" cdkDrag>
-                  <mat-radio-button class="custom-radio-button" *ngFor="let option of data.inputArray"
-                    value="{{data.valueField ? option[data.valueField] : option}}">{{data.displayField ? option[data.displayField] : option}}</mat-radio-button>
-                  </mat-radio-group>
-              </div>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
-        </ng-container>
+      </ng-container>
 
-        <ng-container *ngIf="data.inputType === 'toggle'">
-            <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
-            <div class="pt-3" cdkDrag>
-                <mat-slide-toggle class="custom-toggle" [formControl]="inputFormGroup.get(data.propertyName)">
-                    {{data.displayName}}
-                </mat-slide-toggle>
-              </div>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
+      <ng-container *ngIf="data.inputType === 'dateBox'">
+        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
+          <mat-label>{{data.displayName}}</mat-label>
+          <input matInput [matDatepicker]="picker1" [formControl]="inputFormGroup.get(data.propertyName)">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data,formGroupName: formGroupName, formArrayName:formArrayName}">
         </ng-container>
-        <ng-container *ngIf="data.inputType === 'checkBox'">
-            <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
-            <div class="pt-3" cdkDrag>
-                <mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get(data.propertyName)">{{data.displayName}}</mat-checkbox>
-              </div>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
+      </ng-container>
+      <ng-container *ngIf="data.inputType === 'radioButton'">
+        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <div class="pt-3" cdkDrag>
+          <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get(data.propertyName)" cdkDrag>
+            <mat-radio-button class="custom-radio-button" *ngFor="let option of data.inputArray"
+              value="{{data.valueField ? option[data.valueField] : option}}">
+              {{data.displayField ? option[data.displayField] : option}}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}">
         </ng-container>
-        <ng-container *ngIf="data.inputType === 'multiSelect'" >
-            <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
-            <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
-                <mat-select placeholder="{{data.displayName}}" [formControl]="inputFormGroup.get(data.propertyName)" multiple>
-                  <mat-select-trigger>
-                    {{inputFormGroup.get(data.propertyName).value ? inputFormGroup.get(data.propertyName).value[0] : ''}}
-                    <span *ngIf="inputFormGroup.get(data.propertyName).value?.length > 1" class="example-additional-selection">
-                      (+{{inputFormGroup.get(data.propertyName).value.length - 1}} {{inputFormGroup.get(data.propertyName).value?.length === 2 ? 'other' : 'others'}})
-                    </span>
-                  </mat-select-trigger>
-                  <mat-option *ngFor="let option of data.inputArray" [value]="data.valueField ? option[data.valueField] : option">
-                    {{data.displayField ? option[data.displayField] : option}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <ng-container *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}"></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="data.inputType === 'toggle'">
+        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <div class="pt-3" cdkDrag>
+          <mat-slide-toggle class="custom-toggle" [formControl]="inputFormGroup.get(data.propertyName)">
+            {{data.displayName}}
+          </mat-slide-toggle>
+        </div>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}">
         </ng-container>
+      </ng-container>
+      <ng-container *ngIf="data.inputType === 'checkBox'">
+        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <div class="pt-3" cdkDrag>
+          <mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get(data.propertyName)">
+            {{data.displayName}}</mat-checkbox>
+        </div>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}">
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="data.inputType === 'multiSelect'">
+        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
+          <mat-select placeholder="{{data.displayName}}" [formControl]="inputFormGroup.get(data.propertyName)" multiple>
+            <mat-select-trigger>
+              {{inputFormGroup.get(data.propertyName).value ? inputFormGroup.get(data.propertyName).value[0] : ''}}
+              <span *ngIf="inputFormGroup.get(data.propertyName).value?.length > 1"
+                class="example-additional-selection">
+                (+{{inputFormGroup.get(data.propertyName).value.length - 1}}
+                {{inputFormGroup.get(data.propertyName).value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let option of data.inputArray"
+              [value]="data.valueField ? option[data.valueField] : option">
+              {{data.displayField ? option[data.displayField] : option}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="settingsAndRemove; context: {$implicit: data, formGroupName: formGroupName, formArrayName:formArrayName}">
+        </ng-container>
+      </ng-container>
     </ng-container>
   </ng-template>
   <ng-template #formArrayDisplay let-data let-formArrayName="formArrayName">
@@ -149,13 +185,15 @@
   <ng-template #formGroupDisplay let-data let-formArrayName="formArrayName" let-formGroupName="formGroupName">
     FormGroup Name - {{ formGroupName }}
     <ng-container *ngFor="let control of getObjectValuesOfControls(data.controls); let j=index">
-      <ng-container *ngTemplateOutlet="controlsDisplay; context:{$implicit: control,
+      <ng-container
+        *ngTemplateOutlet="controlsDisplay; context:{$implicit: control,
         inputFormGroup: this.inputFormGroup.get(data.formGroupName), formArrayName: formArrayName, formGroupName: data.formGroupName}">
       </ng-container>
     </ng-container>
   </ng-template>
-  
+
   <ng-container #settings></ng-container>
+  <ng-container #globalSettings></ng-container>
   <ng-template #settingsAndRemove let-data let-formGroupName="formGroupName" let-formArrayName="formArrayName">
     <button (click)="onSettingsClick(data, formGroupName, formArrayName)">settings</button>
     <!-- <button (click)="removeControl(propertyName, index)">remove</button> -->
@@ -246,4 +284,3 @@
                     </ng-container>
               </ng-container>
           </ng-container> -->
-      

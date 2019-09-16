@@ -29,11 +29,13 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-drop/mat-form-generator-drag-drop.component';
 import { MatFormAdvancedSettingsComponent } from './mat-form-advanced-settings/mat-form-advanced-settings.component';
+import { GlobalFormSettingsComponent } from './global-form-settings/global-form-settings.component';
 
 @NgModule({
   declarations: [
     MatFormGeneratorDragDropComponent,
-    MatFormAdvancedSettingsComponent
+    MatFormAdvancedSettingsComponent,
+    GlobalFormSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,7 @@ import { MatFormAdvancedSettingsComponent } from './mat-form-advanced-settings/m
   ],
   exports: [MatFormGeneratorDragDropComponent],
 
-  entryComponents: [MatFormAdvancedSettingsComponent],
+  entryComponents: [MatFormAdvancedSettingsComponent, GlobalFormSettingsComponent],
   providers: [],
   
 })

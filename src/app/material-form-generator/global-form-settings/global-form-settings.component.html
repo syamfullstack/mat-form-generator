@@ -1,0 +1,42 @@
+<!-- <ng-template #settings let-data>
+          <h2 mat-dialog-title>Settings</h2>
+          <mat-dialog-content>
+             <mat-form-field class="example-full-width">
+                 <input matInput placeholder="Display Name" [(ngModel)]="globalSettings.formTitle">
+               </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Property Name" [(ngModel)]="globalSettings.formTitle">
+            </mat-form-field>
+            </mat-dialog-content>
+</ng-template> -->
+<ng-template #settings>
+  <ng-container *ngIf="globalSettings">
+    <h2 mat-dialog-title>Settings</h2>
+    <mat-dialog-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Form title</mat-label>
+        <input matInput [formControl]="settingsFormGroup.get('formTitle')">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Component Name</mat-label>
+        <input matInput [formControl]="settingsFormGroup.get('componentName')">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Component File Name</mat-label>
+        <input matInput [formControl]="settingsFormGroup.get('componentFileName')">
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Submit button title</mat-label>
+        <input matInput [formControl]="settingsFormGroup.get('buttons').controls.okButtonTitle">
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Cancel button title</mat-label>
+        <input matInput [formControl]="settingsFormGroup.get('buttons').controls.cancelButtonTitle">
+      </mat-form-field>
+      <mat-dialog-actions>
+        <button mat-button (click)="closeSettings()">No</button>
+        <button mat-button (click)="onSubmitSettings()">Yes</button>
+      </mat-dialog-actions>
+    </mat-dialog-content>
+  </ng-container>
+</ng-template>
