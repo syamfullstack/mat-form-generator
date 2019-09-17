@@ -21,14 +21,12 @@
           </ng-container>
           <ng-container *ngIf="data.formArrayName">
             <!-- <pre>{{data | json}}</pre> -->
-            <ng-container
-              *ngTemplateOutlet="formArrayDisplay; context:{$implicit: data, formArrayName: data.formArrayName}">
+            <ng-container *ngTemplateOutlet="formArrayDisplay; context:{$implicit: data, formArrayName: data.formArrayName}">
             </ng-container>
           </ng-container>
           <ng-container *ngIf="data.formGroupName">
             <!-- <pre>{{data | json}}</pre> -->
-            <ng-container
-              *ngTemplateOutlet="formGroupDisplay; context:{$implicit: data, formArrayName: null, formGroupName: data.formGroupName}">
+            <ng-container *ngTemplateOutlet="formGroupDisplay; context:{$implicit: data, formArrayName: null, formGroupName: data.formGroupName}">
             </ng-container>
           </ng-container>
         </ng-container>

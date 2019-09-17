@@ -153,7 +153,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
           if (key !== propertyName) {
             control[key] = controlData[key]
           } else {
-            control[propertyName] = settings;
+            control[settings.propertyName] = settings;
           }
         }));
         controls.push(control);
