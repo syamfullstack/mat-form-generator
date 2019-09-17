@@ -30,12 +30,14 @@ import { CommonModule } from '@angular/common';
 import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-drop/mat-form-generator-drag-drop.component';
 import { MatFormAdvancedSettingsComponent } from './mat-form-advanced-settings/mat-form-advanced-settings.component';
 import { GlobalFormSettingsComponent } from './global-form-settings/global-form-settings.component';
+import { MatFormGeneratorComponent } from '../mat-form-generator/mat-form-generator.component';
 
 @NgModule({
   declarations: [
     MatFormGeneratorDragDropComponent,
     MatFormAdvancedSettingsComponent,
-    GlobalFormSettingsComponent
+    GlobalFormSettingsComponent,
+    MatFormGeneratorComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,7 @@ import { GlobalFormSettingsComponent } from './global-form-settings/global-form-
     MatDividerModule,
     MatListModule
   ],
-  exports: [MatFormGeneratorDragDropComponent],
+  exports: [MatFormGeneratorDragDropComponent, MatFormGeneratorComponent],
 
   entryComponents: [MatFormAdvancedSettingsComponent, GlobalFormSettingsComponent],
   providers: [],

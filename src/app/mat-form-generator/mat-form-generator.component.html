@@ -1,98 +1,67 @@
-<mat-form-field class="example-full-width">
-  <input matInput placeholder="Input" [formControl]="inputJson">
-</mat-form-field>
-<!-- 
-<table>
-  <tr>
-    <th>Property Name</th>
-    <th>Input Type</th>
-  </tr>
-  <tr *ngFor="let property of dataSource">
-    <td>{{property.propertyName}}</td>
-    <td>
-            <mat-form-field class="example-full-width">
-                    <mat-select placeholder="Select" [(ngModel)]="property.inputType">
-                            <mat-option value="option1">Option1</mat-option>
-                            <mat-option value="option2">Option2</mat-option>
-                            <mat-option value="option3">Option3</mat-option>
-                        </mat-select>
+<div class="container pt-5 mb-5 mat-container col col-4" style="margin: 16px;" *ngIf="inputFormGroup">
+  <mat-card class="mat-card-block">
+    <mat-card-header>
+      <mat-card-title class="material-title">{{formTitle}}</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content  class="content-position">
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput [formControl]="inputFormGroup.get('name')">
+        </mat-form-field>
+        <h6>Emails</h6>
+        <ng-container *ngFor="let emailFormGroup of inputFormGroup.get('emails').controls">
+          <mat-form-field class="custom-form-field" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput [formControl]="emailFormGroup.get('email')">
             </mat-form-field>
-    </td>
-  </tr>
-  <tr>
-</table> -->
-
-
- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-width">
-    <ng-container matColumnDef="propertyName">
-      <th mat-header-cell *matHeaderCellDef> Property Name. </th>
-      <td mat-cell *matCellDef="let element">
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Input" [(ngModel)]="element.propertyName">
+        </ng-container>
+        <button mat-button (click)="addEmails()">Add Email</button>
+        <div class="pt-3" cdkDrag>
+          <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get('gender')">
+            <mat-radio-button class="custom-radio-button" *ngFor="let option of genderList" value="{{option}}">
+                {{option}}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <mat-form-field class="custom-form-field" appearance="outline">
+            <mat-select placeholder="Select Interests" [formControl]="inputFormGroup.get('interests')" multiple>
+              <mat-select-trigger>
+                {{inputFormGroup.get('interests').value ? interestsList[0].name : ''}}
+                <span *ngIf="inputFormGroup.get('interests').value?.length > 1"
+                  class="example-additional-selection">
+                  (+{{inputFormGroup.get('interests').value.length - 1}}
+                  {{inputFormGroup.get('interests').value?.length === 2 ? 'other' : 'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let option of interestsList" [value]="option.id">
+                {{option.name}}
+              </mat-option>
+            </mat-select>
         </mat-form-field>
-      </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="inputType">
-      <th mat-header-cell *matHeaderCellDef> Input Type </th>
-      <td mat-cell *matCellDef="let element">
-        <mat-select placeholder="Select" [(ngModel)]="element.inputType">
-            <mat-option *ngFor="let option of inputTypes" value="{{option}}">{{option}}</mat-option>
-        </mat-select>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="inputArray">
-        <th mat-header-cell *matHeaderCellDef> Input Array </th>
-        <td mat-cell *matCellDef="let element">
-          <input matInput placeholder="Input">
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="valueField">
-        <th mat-header-cell *matHeaderCellDef>Value Field</th>
-        <td mat-cell *matCellDef="let element">
-          <input matInput placeholder="Input">
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="displayField">
-        <th mat-header-cell *matHeaderCellDef>Display Field</th>
-        <td mat-cell *matCellDef="let element">
-          <input matInput placeholder="Input">
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="required">
-        <th mat-header-cell *matHeaderCellDef>Required</th>
-        <td mat-cell *matCellDef="let element">
-          <input matInput placeholder="Input">
-        </td>
-      </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  <button (click)="createForm()">Preview</button>
-  <button (click)="addRow()">Add Row</button>
-  <pre *ngIf="inputFormGroup">{{inputFormGroup.value | json}}</pre>
-
-
-
-  <form *ngIf="inputFormGroup" [formGroup]="inputFormGroup">
-    <ng-container *ngFor="let data of dataSource">
-      <!-- <ng-container *ngIf="data.inputType === 'textbox'">
-          <mat-form-field class="example-full-width" *ngIf="inputFormGroup.get(data.propertyName)">
-            <input matInput placeholder="{{data.propertyName}}" [formControl]="inputFormGroup.get(data.propertyName)">
-          </mat-form-field>
-      </ng-container> -->
-            
-      <ng-container [ngSwitch]="data.inputType" *ngIf="inputFormGroup.get(data.propertyName)">
-        <mat-form-field class="example-full-width" *ngSwitchCase="'textbox'">
-              <input matInput placeholder="Input" [formControl]="inputFormGroup.get(data.propertyName)">
+        <div class="pt-3">
+          <mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get('active')">active</mat-checkbox>
+        </div>
+        <h6>Address</h6>
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <mat-label>Zip</mat-label>
+          <input matInput [formControl]="inputFormGroup.get('address').controls.zip">
         </mat-form-field>
-        <mat-form-field *ngSwitchCase="'datebox'">
-            <input matInput [matDatepicker]="picker1" placeholder="Date" [formControl]="inputFormGroup.get(data.propertyName)">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <mat-label>State</mat-label>
+            <mat-select [formControl]="inputFormGroup.get('address').controls.state">
+              <mat-option *ngFor="let option of stateList" [value]="option">
+                {{option}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="custom-form-field" appearance="outline">
+            <mat-label>State</mat-label>
+              <mat-select [formControl]="inputFormGroup.get('address').controls.country">
+                <mat-option *ngFor="let option of countryList" [value]="option.id">
+                  {{option.name}}</mat-option>
+              </mat-select>
           </mat-form-field>
-      </ng-container>
-    </ng-container>
-  </form>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+<pre>{{inputFormGroup.value | json}}</pre>

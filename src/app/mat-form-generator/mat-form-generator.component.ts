@@ -1,18 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
-
-const ELEMENT_DATA: any[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-mat-form-generator',
@@ -21,60 +8,92 @@ const ELEMENT_DATA: any[] = [
 })
 export class MatFormGeneratorComponent implements OnInit {
 
-  inputJson: FormControl = new FormControl();
-  displayedColumns: string[] = ['propertyName', 'inputType', 'inputArray', 'valueField', 'displayField', 'required'];
-  dataSource = [];
-  inputTypes: string[] = ['textbox', 'select', 'radio', 'checkbox', 'datebox'];
-
+  formTitle: string;
   inputFormGroup: FormGroup;
+  inputData: any = {} as any;
+  stateList: any = [];
+  countryList: any = [];
+  genderList: any = [];
+  interestsList: any = [];
 
-  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.inputJson.valueChanges.subscribe((data: string) => {
-      const columns = [];
-      try {
-        const keys = Object.keys(JSON.parse(data));
-        keys.forEach((key: string) => {
-          columns.push({
-            propertyName: key,
-            inputType: null,
-            inputArray: null,
-            valueField: null,
-            displayField: null,
-            required: true
-          });
-        });
-        this.dataSource = columns;
+    
+    this.inputData = {
+      name: 'syam',
+      emails: [{
+          id: 1,
+          email: 'syamrc46@gmail.com'
+      },{
+        id: 2,
+        email: 'syampallithode@gmail.com'
+      }], // form array
+      gender: 'male', // radio
+      interests: [1, 2], // multiselect
+      active: true, // checkbox
+      address: {
+        zip: 5555,
+        state: 'Kerala', // selectbox
+        country: 1 // select
       }
-      catch(ex) {
-
-      }
-      
-    });
+    };
+    this.addInputBindings();
+    this.createForm();
   }
 
-  addRow() {
-    this.dataSource = [...this.dataSource, {
-      propertyName: null,
-      inputType: null,
-      inputArray: null,
-      valueField: null,
-      displayField: null,
-      required: true
-    }];
+  addInputBindings() {
+    this.stateList = ['Kerala', 'Tamilnadu'];
+    this.countryList = [
+      {
+        id: 1,
+        name: 'India'
+      },{
+        id: 2,
+        name: 'US'
+      }];
+      this.formTitle = 'Registration';
+      this.genderList = ['male', 'female'];
+      this.interestsList = [{
+        id: 1,
+        name: 'Cricket'
+      },{
+        id: 2,
+        name: 'Football'
+      }, {
+        id: 3,
+        name: 'Chess'
+      }];
   }
 
   createForm() {
-    this.inputFormGroup = this.formBuilder.group({});
-    this.dataSource.forEach(a => {
-      if (!this.inputFormGroup.get(a.propertyName)) {
-        this.inputFormGroup.addControl(a.propertyName, new FormControl());
-      }
-    });
-    setTimeout(() => {
-      // this.cdr.detectChanges();
+    this.inputFormGroup = this.formBuilder.group({
+      name: [this.inputData.name, Validators.required],
+      emails: this.formBuilder.array(this.inputData.emails.map((email: any) => this.createEmailsFormGroup(email))),
+      gender: [this.inputData.gender, Validators.required],
+      interests: [this.inputData.interests, Validators.required],
+      active: [this.inputData.active, Validators.required],
+      address: this.formBuilder.group({
+        zip: [this.inputData.address.zip, [Validators.required]],
+        state: [this.inputData.address.state, [Validators.required]],
+        country: [this.inputData.address.country, [Validators.required]],
+      })
     });
   }
 
+  createEmailsFormGroup(email: any) {
+    return this.formBuilder.group({
+      id: [email.id],
+      email: [email.email, Validators.required]
+    });
+  }
+
+  addEmails() {
+    const data = {
+      id: null,
+      email: null
+    };
+    const emailsFormArray = this.inputFormGroup.get('emails') as FormArray;
+    emailsFormArray.push(this.createEmailsFormGroup(data))
+  }
 }
