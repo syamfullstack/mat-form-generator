@@ -17,7 +17,7 @@
             </mat-form-field>
         </ng-container>
         <button mat-button (click)="addEmails()">Add Email</button>
-        <div class="pt-3" cdkDrag>
+        <div class="pt-3">
           <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get('gender')">
             <mat-radio-button class="custom-radio-button" *ngFor="let option of genderList" value="{{option}}">
                 {{option}}</mat-radio-button>
@@ -64,4 +64,4 @@
     </mat-card-content>
   </mat-card>
 </div>
-<pre>{{inputFormGroup.value | json}}</pre>
+<pre *ngIf="inputFormGroup">{{inputFormGroup.value | json}}</pre>

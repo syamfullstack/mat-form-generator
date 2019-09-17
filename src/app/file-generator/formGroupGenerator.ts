@@ -11,7 +11,8 @@ export const formGroupGenerator = (data) => {
             let childFormGroupBody = '';
             const childFormGroupValues = Object.values(control.controls);
             childFormGroupValues.forEach((childControl: any) => {
-                childFormGroupBody = childFormGroupBody + `\n\t\t${pageBreak +  childControl.propertyName}: [this.inputData.${childControl.propertyName}${childControl.required ? ', Validators.required': '' }],`
+                childFormGroupBody = childFormGroupBody + `\n\t\t${pageBreak +  childControl.propertyName}: 
+                    [this.inputData.${childControl.propertyName}${childControl.required ? ', Validators.required': '' }],`
             });
             formGroupBody = formGroupBody + childFormGroup +  childFormGroupBody + `\n\t${pageBreak}}),`;
 
