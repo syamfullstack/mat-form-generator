@@ -57,8 +57,6 @@
       </mat-form-field>
     </div>
   </div>
-  <pre>{{ inputFormGroup?.value | json }}</pre>
-  <pre>{{ selectedControls1 | json }}</pre>
   <br />
   <ng-template #controlsDisplay let-data let-inputFormGroup="inputFormGroup" let-formArrayName="formArrayName"
     let-formGroupName="formGroupName">
@@ -199,7 +197,7 @@
     <button (click)="onSettingsClick(data, formGroupName, formArrayName)">settings</button>
     <!-- <button (click)="removeControl(propertyName, index)">remove</button> -->
   </ng-template>
-
+  <app-preview-form [selectedControls]="selectedControls1" [inputFormGroup]="inputFormGroup" [settings]="selectedGlobalFormSettings"></app-preview-form>
   <app-file-preview [pages]="pages"></app-file-preview>
 
 

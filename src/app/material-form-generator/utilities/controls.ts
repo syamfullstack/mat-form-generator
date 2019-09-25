@@ -8,7 +8,7 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   },
   {
     propertyName: 'textArea',
@@ -20,7 +20,7 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   },
   {
     propertyName: 'selectBox',
@@ -32,7 +32,7 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   },
   {
     propertyName: 'datebox',
@@ -44,7 +44,7 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   },
   {
     propertyName: 'toggle',
@@ -56,7 +56,7 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   },
   {
     propertyName: 'checkBox',
@@ -68,7 +68,7 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   },
   {
     propertyName: 'radioButton',
@@ -80,7 +80,7 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   },
   {
     propertyName: 'multiSelect',
@@ -92,6 +92,6 @@ export const getControls = () => ([{
     required: true,
     openSettings: false,
     selected: false,
-    isFormControlOnly: true
+    isFormControlOnly: false
   }]);
 

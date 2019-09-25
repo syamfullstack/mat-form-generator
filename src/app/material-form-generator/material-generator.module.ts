@@ -32,6 +32,7 @@ import { MatFormAdvancedSettingsComponent } from './mat-form-advanced-settings/m
 import { GlobalFormSettingsComponent } from './global-form-settings/global-form-settings.component';
 import { MatFormGeneratorComponent } from '../mat-form-generator/mat-form-generator.component';
 import { FilePreviewComponent } from './file-preview/file-preview.component';
+import { PreviewFormComponent } from './preview-form/preview-form.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { FilePreviewComponent } from './file-preview/file-preview.component';
     MatFormAdvancedSettingsComponent,
     GlobalFormSettingsComponent,
     MatFormGeneratorComponent,
-    FilePreviewComponent
+    FilePreviewComponent,
+    PreviewFormComponent
   ],
   imports: [
     BrowserModule,

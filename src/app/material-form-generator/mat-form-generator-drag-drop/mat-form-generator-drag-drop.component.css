@@ -1,4 +1,4 @@
-.example-container {
+/* .example-container {
     width: 400px;
     max-width: 100%;
     margin: 0 25px 25px 0;
@@ -58,25 +58,25 @@
     font-weight: normal;
     font-style: normal;
     font-size: 24px;  /* Preferred icon size */
-    display: inline-block;
+    /* display: inline-block;
     line-height: 1;
     text-transform: none;
     letter-spacing: normal;
     word-wrap: normal;
     white-space: nowrap;
-    direction: ltr;
+    direction: ltr; */
   
     /* Support for all WebKit browsers. */
-    -webkit-font-smoothing: antialiased;
+    /* -webkit-font-smoothing: antialiased; */
     /* Support for Safari and Chrome. */
-    text-rendering: optimizeLegibility;
+    /* text-rendering: optimizeLegibility; */
   
     /* Support for Firefox. */
-    -moz-osx-font-smoothing: grayscale;
+    /* -moz-osx-font-smoothing: grayscale; */
   
     /* Support for IE. */
-    font-feature-settings: 'liga';
-  }
+    /* font-feature-settings: 'liga'; */
+  /* }
   .full-width {
     width: 100% !important;
-  }
+  } */ 

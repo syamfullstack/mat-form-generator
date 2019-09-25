@@ -1,5 +1,7 @@
 import { componentGenerator } from './component.generator';
 import { getHtmlContent } from './html.generator';
+import { getCssClassContent } from './css.generator';
+import { getSpecFile } from './specFile.generator';
 
 export const outputFormat = () => ({
 	componentSection: {
@@ -30,9 +32,12 @@ export const outputFormat = () => ({
 });
 
 export const fileGenerator = (input) => {
+	const html = getHtmlContent(input);
 	const file = {
 		component: componentGenerator(input, outputFormat()),
-		html: getHtmlContent(input)
+		html: html.htmlContent,
+		css: getCssClassContent(html.controlTypes),
+		spec: getSpecFile(input)
 	}
 	return file;
 };

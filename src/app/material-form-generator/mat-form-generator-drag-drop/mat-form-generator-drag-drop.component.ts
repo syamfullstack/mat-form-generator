@@ -312,10 +312,10 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 /*
   1. Display corresponding component and its html file => Done
   2. Use array instead of Objects. => Done
-  3. Create a preview form
+  3. Create a preview form => Done
   4. Create css file, test file.
   5. create actions in component.
   6. Align properly.
-  7. 
+  7. Validation message
 
 */

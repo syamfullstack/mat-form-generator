@@ -1,4 +1,5 @@
 export const getHtmlContent = (input) => {
+    const controlTypes = [];
     let template = {
         header: null,
         content: null,
@@ -23,6 +24,9 @@ export const getHtmlContent = (input) => {
                 const formGroupName = `${control.formGroupName.charAt(0).toUpperCase() + control.formGroupName.substring(1)}`;
                 control.controls.forEach((formGroupControl: any) => {
                     if (!formGroupControl.isFormControlOnly) {
+                        if (!controlTypes.find(a => a === formGroupControl.inputType)) {
+                            controlTypes.push(formGroupControl.inputType);
+                        }
                         let htmlControl = getMaterialControls(formGroupControl, '\n\t\t\t', `inputFormGroup.get('${control.formGroupName}').controls.${formGroupControl.propertyName}`);
                         formGroupWrapper.content += '\n' + htmlControl;
                     } 
@@ -42,6 +46,9 @@ export const getHtmlContent = (input) => {
                     control.formArrayName.substring(1)}`;
                 formArrayControls.forEach((formArrayControl: any) => {
                     if (!formArrayControl.isFormControlOnly) {
+                        if (!controlTypes.find(a => a === formArrayControl.inputType)) {
+                            controlTypes.push(formArrayControl.inputType);
+                        }
                         let htmlControl = getMaterialControls(formArrayControl, '\n\t\t\t\t', `${control.formArrayName + 'FormGroup'}.get('${formArrayControl.propertyName}')`);
                         formArrayWrapper.content += htmlControl;
                     }
@@ -53,6 +60,9 @@ export const getHtmlContent = (input) => {
                 template.content += formArrayContent;
             } else {
                 if (!control.isFormControlOnly) {
+                    if (!controlTypes.find(a => a === control.inputType)) {
+                        controlTypes.push(control.inputType);
+                    }
                     let htmlControl = getMaterialControls(control, '\n\t\t\t', `inputFormGroup.get('${control.propertyName}')`);
                     template.content+= '\n' + htmlControl;
                 }
@@ -62,7 +72,10 @@ export const getHtmlContent = (input) => {
     console.log(template.header + template.content + template.footer);
     // console.log(matForm.content);
     // console.log(matForm.footer);
-    return (template.header + template.content + template.footer);
+    return {
+        controlTypes: controlTypes,
+        htmlContent: (template.header + template.content + template.footer)
+    };
 };
 
 export const getHtmlForControls = {};
