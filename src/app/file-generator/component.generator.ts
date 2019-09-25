@@ -62,8 +62,8 @@ export const createForm = (formSection, classContent, controls) => {
 		if (control.formGroupName) {
 			const childFormGroup = `\n\t${pageBreak + control.formGroupName}: this.formBuilder.group({`;
 			let childFormGroupBody = '';
-			const childFormGroupValues = Object.values(control.controls);
-			childFormGroupValues.forEach((childControl: any) => {
+			// const childFormGroupValues = Object.values(control.controls);
+			control.controls.forEach((childControl: any) => {
                 createBindings(childControl, classContent);
                 if (!formSection.contents.includes('Validators') && childControl.required) {
                     formSection.contents = formSection.contents + ', ' + 'Validators';
@@ -81,8 +81,7 @@ export const createForm = (formSection, classContent, controls) => {
 
 			///////////////////////////////////////////////////////////////////////////
 			// add emailList in declaration part
-			classContent.declerationPart =
-				classContent.declerationPart + `\n\t${control.formArrayName + 'List'}: any[] = [];`;
+			classContent.declerationPart = classContent.declerationPart + `\n\t${control.formArrayName + 'List'}: any[] = [];`;
 			///////////////////////////////////////////////////////////////////////////
 
 			const childFormArray =
@@ -96,7 +95,7 @@ export const createForm = (formSection, classContent, controls) => {
 			let childFormGroupBody = '';
 			let dataObject = 'const data = {';
 			control.controls.forEach((formArrayControl: any) => {
-				formArrayControl = Object.values(formArrayControl);
+				// formArrayControl = Object.values(formArrayControl);
 				formArrayControl.forEach((childControl: any, i) => {
                     if (!formSection.contents.includes('Validators') && childControl.required) {
                         formSection.contents = formSection.contents + ', ' + 'Validators';

@@ -2,11 +2,11 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { fileGenerator } from 'src/app/file-generator/files.generator';
 
 @Component({
-  selector: 'app-preview',
-  templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss']
+  selector: 'app-file-preview',
+  templateUrl: './file-preview.component.html',
+  styleUrls: ['./file-preview.component.scss']
 })
-export class PreviewComponent implements OnInit, OnChanges {
+export class FilePreviewComponent implements OnInit, OnChanges {
   @Input() pages: any;
   file: any = {};
 

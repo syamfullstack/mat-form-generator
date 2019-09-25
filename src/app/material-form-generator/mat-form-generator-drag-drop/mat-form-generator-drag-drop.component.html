@@ -15,7 +15,7 @@
       <mat-divider></mat-divider>
       <mat-card-content cdkDropList class="content-position" (cdkDropListDropped)="drop($event)">
 
-        <ng-container *ngFor="let data of getObjectValuesOfControls(selectedControls1); let i= index">
+        <ng-container *ngFor="let data of selectedControls1; let i= index">
           <ng-container
             *ngTemplateOutlet="controlsDisplay; context:{$implicit: data, inputFormGroup: inputFormGroup, formArrayName: null}">
           </ng-container>
@@ -76,7 +76,7 @@
       </ng-container>
 
       <ng-container *ngIf="data.inputType === 'textArea'">
-        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
         <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
           <mat-label>{{data.displayName}}</mat-label>
           <textarea matInput [formControl]="inputFormGroup.get(data.propertyName)"></textarea>
@@ -87,7 +87,7 @@
       </ng-container>
 
       <ng-container *ngIf="data.inputType === 'selectBox'">
-        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
         <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
           <mat-label>{{data.displayName}}</mat-label>
           <mat-select [formControl]="inputFormGroup.get(data.propertyName)">
@@ -102,7 +102,7 @@
       </ng-container>
 
       <ng-container *ngIf="data.inputType === 'dateBox'">
-        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
         <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
           <mat-label>{{data.displayName}}</mat-label>
           <input matInput [matDatepicker]="picker1" [formControl]="inputFormGroup.get(data.propertyName)">
@@ -114,7 +114,7 @@
         </ng-container>
       </ng-container>
       <ng-container *ngIf="data.inputType === 'radioButton'">
-        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
         <div class="pt-3" cdkDrag>
           <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get(data.propertyName)" cdkDrag>
             <mat-radio-button class="custom-radio-button" *ngFor="let option of data.inputArray"
@@ -128,7 +128,7 @@
       </ng-container>
 
       <ng-container *ngIf="data.inputType === 'toggle'">
-        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
         <div class="pt-3" cdkDrag>
           <mat-slide-toggle class="custom-toggle" [formControl]="inputFormGroup.get(data.propertyName)">
             {{data.displayName}}
@@ -139,7 +139,7 @@
         </ng-container>
       </ng-container>
       <ng-container *ngIf="data.inputType === 'checkBox'">
-        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
         <div class="pt-3" cdkDrag>
           <mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get(data.propertyName)">
             {{data.displayName}}</mat-checkbox>
@@ -149,7 +149,7 @@
         </ng-container>
       </ng-container>
       <ng-container *ngIf="data.inputType === 'multiSelect'">
-        <mat-checkbox class="custom-checkbox" *ngIf="!formArrayName" [(ngModel)]="data.selected"></mat-checkbox>
+        <mat-checkbox class="custom-checkbox" *ngIf="!(formArrayName || formGroupName)" [(ngModel)]="data.selected"></mat-checkbox>
         <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
           <mat-select placeholder="{{data.displayName}}" [formControl]="inputFormGroup.get(data.propertyName)" multiple>
             <mat-select-trigger>
@@ -175,19 +175,20 @@
   <ng-template #formArrayDisplay let-data let-formArrayName="formArrayName">
     FormArray Name - {{ data.formArrayName }}
     <ng-container *ngFor="let item of data.controls; let i=index">
-      <ng-container *ngFor="let control of getObjectValuesOfControls(item); let j=index">
+      <ng-container *ngFor="let control of item; let j=index">
         <ng-container *ngTemplateOutlet="controlsDisplay; context:{$implicit: control,
-          inputFormGroup: this.inputFormGroup.get(data.formArrayName).at(i), formArrayName: formArrayName}">
+          inputFormGroup: inputFormGroup.get(data.formArrayName).at(i), formArrayName: formArrayName}">
         </ng-container>
       </ng-container>
     </ng-container>
+    
   </ng-template>
   <ng-template #formGroupDisplay let-data let-formArrayName="formArrayName" let-formGroupName="formGroupName">
     FormGroup Name - {{ formGroupName }}
-    <ng-container *ngFor="let control of getObjectValuesOfControls(data.controls); let j=index">
+    <ng-container *ngFor="let control of data.controls; let j=index">
       <ng-container
         *ngTemplateOutlet="controlsDisplay; context:{$implicit: control,
-        inputFormGroup: this.inputFormGroup.get(data.formGroupName), formArrayName: formArrayName, formGroupName: data.formGroupName}">
+        inputFormGroup: inputFormGroup.get(data.formGroupName), formArrayName: formArrayName, formGroupName: formGroupName}">
       </ng-container>
     </ng-container>
   </ng-template>
@@ -199,7 +200,7 @@
     <!-- <button (click)="removeControl(propertyName, index)">remove</button> -->
   </ng-template>
 
-  <app-preview [pages]="pages"></app-preview>
+  <app-file-preview [pages]="pages"></app-file-preview>
 
 
 

@@ -31,7 +31,7 @@ import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-dro
 import { MatFormAdvancedSettingsComponent } from './mat-form-advanced-settings/mat-form-advanced-settings.component';
 import { GlobalFormSettingsComponent } from './global-form-settings/global-form-settings.component';
 import { MatFormGeneratorComponent } from '../mat-form-generator/mat-form-generator.component';
-import { PreviewComponent } from './preview/preview.component';
+import { FilePreviewComponent } from './file-preview/file-preview.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +39,7 @@ import { PreviewComponent } from './preview/preview.component';
     MatFormAdvancedSettingsComponent,
     GlobalFormSettingsComponent,
     MatFormGeneratorComponent,
-    PreviewComponent
+    FilePreviewComponent
   ],
   imports: [
     BrowserModule,

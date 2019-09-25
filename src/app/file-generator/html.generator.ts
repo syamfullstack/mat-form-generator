@@ -8,34 +8,36 @@ export const getHtmlContent = (input) => {
         template = {...matForm};
     }
     
-    const controls = Object.values(input.formData.controls);
+    // const controls = Object.values(input.formData.controls);
+    const controls = input.formData.controls;
     debugger;
     controls.forEach((control: any, i) => {
         if (input.formData.settings.formType === 'material') {
             if (control.formGroupName) {
                 const formGroupWrapper = {...matFormGroupWrapper};
-                formGroupWrapper.header = formGroupWrapper.header.replace('{{formGroupTitle}}', control.displayName);
+                formGroupWrapper.header = '\n\t\t\t' + formGroupWrapper.header.replace('{{formGroupTitle}}', control.displayName);
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // formGrouop controls
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                const formGroupControls = Object.values(control.controls);
+                // const formGroupControls = Object.values(control.controls);
                 const formGroupName = `${control.formGroupName.charAt(0).toUpperCase() + control.formGroupName.substring(1)}`;
-                formGroupControls.forEach((formGroupControl: any) => {
+                control.controls.forEach((formGroupControl: any) => {
                     if (!formGroupControl.isFormControlOnly) {
                         let htmlControl = getMaterialControls(formGroupControl, '\n\t\t\t', `inputFormGroup.get('${control.formGroupName}').controls.${formGroupControl.propertyName}`);
-                        formGroupWrapper.content += '\n\n' + htmlControl;
+                        formGroupWrapper.content += '\n' + htmlControl;
                     } 
                 });
-                const formGroupContent = '\n\n\t\t\t' + formGroupWrapper.header + formGroupWrapper.content + '\n\t\t\t' + formGroupWrapper.footer;
+                const formGroupContent = '\n\t\t\t' + formGroupWrapper.header + formGroupWrapper.content + '\n\t\t\t' + formGroupWrapper.footer;
                 template.content += formGroupContent;
             } else if (control.formArrayName && control.controls.length) {
                 const formArrayWrapper = {...matFormArrayWrapper};
-                formArrayWrapper.header = '\n\n\t\t\t' + formArrayWrapper.header.replace('{{formArrayTitle}}', control.displayName);
+                formArrayWrapper.header = '\n\t\t\t' + formArrayWrapper.header.replace('{{formArrayTitle}}', control.displayName);
                 formArrayWrapper.header = formArrayWrapper.header.replace('{{formGroup}}', control.formArrayName + 'FormGroup');
                 formArrayWrapper.header = formArrayWrapper.header.replace('{{formArrayControlName}}', control.formArrayName);
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // formArrayControls
-                const formArrayControls = Object.values(control.controls[0]);
+                const formArrayControls = control.controls[0];
+                // const formArrayControls = Object.values(control.controls[0]);
                 const formArrayName = `${control.formArrayName.charAt(0).toUpperCase() +
                     control.formArrayName.substring(1)}`;
                 formArrayControls.forEach((formArrayControl: any) => {
@@ -52,7 +54,7 @@ export const getHtmlContent = (input) => {
             } else {
                 if (!control.isFormControlOnly) {
                     let htmlControl = getMaterialControls(control, '\n\t\t\t', `inputFormGroup.get('${control.propertyName}')`);
-                    template.content+= '\n\n' + htmlControl;
+                    template.content+= '\n' + htmlControl;
                 }
             }
         }
@@ -157,7 +159,7 @@ export const matForm = {
         <mat-divider></mat-divider>
         <mat-card-content  class="content-position">`,
     content: '',
-    footer: `\n\t\t</mat-card-content>\n\t</mat-card>\n</div>\n<pre *ngIf="inputFormGroup">{{inputFormGroup.value | json}}</pre>`
+    footer: `\n\n\t\t</mat-card-content>\n\t</mat-card>\n</div>\n<pre *ngIf="inputFormGroup">{{inputFormGroup.value | json}}</pre>`
 }
 
 export const matFormArrayWrapper = {
