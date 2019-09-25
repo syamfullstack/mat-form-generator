@@ -41,6 +41,7 @@
     </mat-card>
     <div>
       <button (click)="openGlobalFormSettings()">Open Global Form Settings</button>
+      <button (click)="generateFile()">Generate File</button>
     </div>
     <div *ngIf="selectedControls?.length">
       <button (click)="createFormArray()" *ngIf="!isFormGroup">Create FormArray</button>
@@ -90,8 +91,8 @@
         <mat-form-field class="custom-form-field" appearance="outline" cdkDrag>
           <mat-label>{{data.displayName}}</mat-label>
           <mat-select [formControl]="inputFormGroup.get(data.propertyName)">
-            <mat-option *ngFor="let option of data.inputArray" value="{{option[data.valueField]}}">
-              {{option[data.displayField]}}</mat-option>
+            <mat-option *ngFor="let option of data.inputArray" value="{{data.valueField ? option[data.valueField]: option}}">
+              {{data.displayField ? option[data.displayField]: option}}</mat-option>
 
           </mat-select>
         </mat-form-field>
@@ -197,6 +198,8 @@
     <button (click)="onSettingsClick(data, formGroupName, formArrayName)">settings</button>
     <!-- <button (click)="removeControl(propertyName, index)">remove</button> -->
   </ng-template>
+
+  <app-preview [pages]="pages"></app-preview>
 
 
 

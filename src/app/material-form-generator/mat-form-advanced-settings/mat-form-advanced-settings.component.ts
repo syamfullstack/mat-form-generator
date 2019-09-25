@@ -45,7 +45,9 @@ export class MatFormAdvancedSettingsComponent implements OnInit, AfterViewInit {
       inputArray: [inputArray, [this.inputArrayValidator]],
       valueField: [this.selectedSettings.valueField, [this.valueFieldValidator.bind(this)]],
       displayField: [this.selectedSettings.displayField, [this.displayFieldValidator.bind(this)]],
-      required: [this.selectedSettings.required]
+      required: [this.selectedSettings.required],
+      isFormControlOnly: [this.selectedSettings.isFormControlOnly],
+      
     });
   }
 

@@ -6,6 +6,7 @@ import { getCustomInjector } from '../utilities/custom-injector';
 import { AdvancedSettingsAction } from '../model/advanced-settings.model';
 import { getControls } from '../utilities/controls';
 import { GlobalFormSettingsComponent } from '../global-form-settings/global-form-settings.component';
+import { pages } from 'src/app/file-generator/data';
 
 @Component({
   selector: 'app-mat-form-generator-drag-drop',
@@ -31,21 +32,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   formArrayName: string;
   formGroupName: string;
   selectedControls1: any = {};
-  pages: any =  [{
-    pageName: 'Home',
-    formData: {
-      settings: {
-        formTitle: 'Material Form',
-        componentFileName: 'material-form',
-        componentName: 'MaterialForm',
-        buttons: {
-          okButtonTitle: 'Ok',
-          cancelButtonTitle: 'Cancel'
-        },
-      },
-      controls: {}
-    }
-  }];
+  pages: any;
 
   selectedGlobalFormSettings: any;
 
@@ -58,6 +45,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pages = [ ...pages ];
     this.selectedGlobalFormSettings = { ...this.pages[0].formData.settings };
     this.controls = getControls();
     this.inputFormGroup = this.formBuilder.group({});
@@ -140,11 +128,6 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   }
 
   applySettings(settings, propertyName, formGroupName, formArryName) {
-    // this.selectedControls[index] = { ...settings, inputArray: JSON.parse(settings.inputArray) };
-    // this.inputFormGroup = this.formBuilder.group({});
-    // this.createForm();
-    // this.settings.clear();
-    // settings = { ...settings, inputArray: JSON.parse(settings.inputArray) };
     if (formArryName) {
       const controls = [];
       (this.selectedControls1[formArryName].controls).forEach(controlData => {
@@ -278,20 +261,23 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     return Object.values(controls);
   }
 
-  // getFormArray(i, data) {
-  //   this;
-  //   debugger;
-  //   const dat = (this.inputFormGroup.get(data.formArrayName) as FormArray).at(i);
-  //   return (this.inputFormGroup.get(data.formArrayName) as FormArray).at(i);
-  // }
-
   deleteControls() {
 
   }
 
+  generateFile() {
+    this.pages[0].formData.controls = this.selectedControls1;
+    this.pages = [...this.pages];
+  }
+
 }
-
-
 /*
+  1. Display corresponding component and its html file => Done
+  2. Use array instead of Objects.
+  3. Create a preview form
+  4. Create css file, test file.
+  5. create actions in component.
+  6. Align properly.
+  7. 
 
 */

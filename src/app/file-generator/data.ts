@@ -106,6 +106,24 @@ export const data2 = {
       "displayField": null,
       "required": true
    },
+   "date": {
+      "inputType": "dateBox",
+      "displayName": "Date",
+      "propertyName": "date",
+      "inputArray": null,
+      "valueField": null,
+      "displayField": null,
+      "required": true
+   },
+   "about": {
+      "inputType": "textArea",
+      "displayName": "About",
+      "propertyName": "about",
+      "inputArray": null,
+      "valueField": null,
+      "displayField": null,
+      "required": true
+   },
    "emails": {
       "displayName": "emails",
       "formArrayName": "emails",
@@ -142,15 +160,30 @@ export const data2 = {
       "inputArray": [
          {
             "id": 1,
-            "name": "Cricket"
+            "name": "Cricket",
+            "val": [1,2,3],
+            "data": {
+               "id": 1,
+               "ds": 'sdsdsd'
+            }
          },
          {
             "id": 2,
-            "name": "Football"
+            "name": "Football",
+            "val": [1,2,3],
+            "data": {
+               "id": 1,
+               "ds": 'sdsdsd'
+            }
          },
          {
             "id": 3,
-            "name": "Chess"
+            "name": "Chess",
+            "val": [1,2,3],
+            "data": {
+               "id": 1,
+               "ds": 'sdsdsd'
+            }
          }
       ],
       "valueField": "id",
@@ -171,6 +204,15 @@ export const data2 = {
       "formArrayName": null,
       "formGroupName": "address",
       "controls": {
+         "permanant": {
+            "inputType": "toggle",
+            "displayName": "permanant",
+            "propertyName": "permanant",
+            "inputArray": null,
+            "valueField": null,
+            "displayField": null,
+            "required": true
+         },
          "zip": {
             "inputType": "textBox",
             "displayName": "Zip",
@@ -213,3 +255,22 @@ export const data2 = {
       }
    }
 };
+
+export const pages = [{
+   pageName: 'Home1111',
+   settings: {
+     componentFileName: 'mat-form-generator',
+     componentName: 'MatFormGenerator'
+   },
+   formData: {
+     settings: {
+       formTitle: 'Material Form',
+       buttons: {
+         okButtonTitle: 'Ok',
+         cancelButtonTitle: 'Cancel'
+       },
+       formType: 'material'
+     },
+     controls: null
+   }
+ }];
