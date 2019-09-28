@@ -52,10 +52,11 @@ export const getHtmlContent = (input) => {
                         formArrayWrapper.content += htmlControl;
                     }
                 });
-                formArrayWrapper.content += '\n\t\t\t\t' + matFormArrayWrapper.addButton.replace('{{method}}', `add${formArrayName}`).replace('{{buttonTitle}}', `Add ${formArrayName}`);
+                // formArrayWrapper.content += '\n\t\t\t\t' + matFormArrayWrapper.addButton.replace('{{method}}', `add${formArrayName}`).replace('{{buttonTitle}}', `Add ${formArrayName}`);
+                const formArrayAddButton = '\n\t\t\t' + matFormArrayWrapper.addButton.replace('{{method}}', `add${formArrayName}`).replace('{{buttonTitle}}', `Add ${formArrayName}`);
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                const formArrayContent = '\n\t\t\t' + formArrayWrapper.header + formArrayWrapper.content + '\n\t\t\t' + formArrayWrapper.footer;
+                const formArrayContent = '\n\t\t\t' + formArrayWrapper.header + formArrayWrapper.content + '\n\t\t\t' + formArrayWrapper.footer + formArrayAddButton;
                 template.content += formArrayContent;
             } else {
                 if (!control.isFormControlOnly) {

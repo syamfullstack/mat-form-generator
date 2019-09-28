@@ -30,19 +30,23 @@ import { CommonModule } from '@angular/common';
 import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-drop/mat-form-generator-drag-drop.component';
 import { MatFormAdvancedSettingsComponent } from './mat-form-advanced-settings/mat-form-advanced-settings.component';
 import { GlobalFormSettingsComponent } from './global-form-settings/global-form-settings.component';
-import { MatFormGeneratorComponent } from '../../mat-form-generator/mat-form-generator.component';
+// import { MatFormGeneratorComponent } from '../../mat-form-generator/mat-form-generator.component';
 import { FilePreviewComponent } from './file-preview/file-preview.component';
 import { PreviewFormComponent } from './preview-form/preview-form.component';
 import { MaterialRoutingModule } from './material.route.module';
+import { MatFormGeneratorComponent } from './mat-form-generator/mat-form-generator.component';
+import { MaterialContainerComponent } from './material-container/material-container.component';
 
 @NgModule({
   declarations: [
     MatFormGeneratorDragDropComponent,
     MatFormAdvancedSettingsComponent,
     GlobalFormSettingsComponent,
-    MatFormGeneratorComponent,
+    // MatFormGeneratorComponent,
     FilePreviewComponent,
-    PreviewFormComponent
+    PreviewFormComponent,
+    MatFormGeneratorComponent,
+    MaterialContainerComponent
   ],
   imports: [
     // BrowserModule,

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatFormGeneratorComponent } from './mat-form-generator.component';
+import { MaterialContainerComponent } from './material-container.component';
 
-describe('MatFormGeneratorComponent', () => {
-  let component: MatFormGeneratorComponent;
-  let fixture: ComponentFixture<MatFormGeneratorComponent>;
+describe('MaterialContainerComponent', () => {
+  let component: MaterialContainerComponent;
+  let fixture: ComponentFixture<MaterialContainerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MatFormGeneratorComponent ]
+      declarations: [ MaterialContainerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MatFormGeneratorComponent);
+    fixture = TestBed.createComponent(MaterialContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

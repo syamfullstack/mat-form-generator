@@ -99,8 +99,17 @@
 //     emailsFormArray.push(this.createEmailsFormGroup(data))
 //   }
 // }
+
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators, FormArray } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+	isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+	  const isSubmitted = form && form.submitted;
+	  return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+	}
+}
 
 
 @Component({
@@ -113,12 +122,13 @@ export class MatFormGeneratorComponent implements OnInit {
 
 	inputFormGroup: FormGroup;
 	inputData: any = <any>{};
-	emailsList: any[] = [];
 	genderList: any[] = [];
 	interestsList: any[] = [];
 	stateList: any[] = [];
 	countryList: any[] = [];
+	emailsList: any[] = [];
 	formTitle: string = 'Material Form';
+	matcher = new MyErrorStateMatcher();
 
 	constructor(private formBuilder: FormBuilder) { }
 
@@ -133,39 +143,24 @@ export class MatFormGeneratorComponent implements OnInit {
 			{
 				id: 1,
 				name: 'Cricket',
-				val: [1,2,3],
-				data: {
-					id: 1,
-					ds: 'sdsdsd',
-				},
 			},
 			{
 				id: 2,
 				name: 'Football',
-				val: [1,2,3],
-				data: {
-					id: 1,
-					ds: 'sdsdsd',
-				},
 			},
 			{
 				id: 3,
 				name: 'Chess',
-				val: [1,2,3],
-				data: {
-					id: 1,
-					ds: 'sdsdsd',
-				},
 			}];
-		this.stateList = ["Kerala","Tamilnadu"];
+		this.stateList = ["kerala","Tamilnadu"];
 		this.countryList = [
 			{
 				id: 1,
-				name: 'India',
+				country: 'India',
 			},
 			{
 				id: 2,
-				name: 'US',
+				country: 'China',
 			}];
 	}
 
@@ -173,32 +168,38 @@ export class MatFormGeneratorComponent implements OnInit {
 		this.inputFormGroup = this.formBuilder.group({
 			name: [this.inputData.name, Validators.required],
 			date: [this.inputData.date, Validators.required],
-			about: [this.inputData.about, Validators.required],
-			emails: this.formBuilder.array((this.inputData.emails || []).map((data: any) =>
-            		this.createEmailsFormGroup(data))),
-			gender: [this.inputData.gender, Validators.required],
+			about: [this.inputData.about],
+			gender: [this.inputData.gender],
 			interests: [this.inputData.interests, Validators.required],
-			active: [this.inputData.active, Validators.required],
+			active: [this.inputData.active],
 			address: this.formBuilder.group({
-				permanant: [(this.inputData || {}).permanant, Validators.required],
-				zip: [(this.inputData || {}).zip, Validators.required],
+				village: [(this.inputData || {}).village, Validators.required],
 				state: [(this.inputData || {}).state, Validators.required],
 				country: [(this.inputData || {}).country, Validators.required],
 			}),
+			emails: this.formBuilder.array((this.inputData.emails || []).map((data: any) =>
+            		this.createEmailsFormGroup(data))),
 		});
 	}
 	
 	createEmailsFormGroup(data) {
 		return this.formBuilder.group({
+				id: [data.id],
 				email: [data.email, Validators.required],
 		});
 	}
 
 	addEmails() { 
 		const data = {
+			id: null ,
 			email: null 
 		};
 		const emailsFormArray = this.inputFormGroup.get('emails') as FormArray;
 		emailsFormArray.push(this.createEmailsFormGroup(data)); 
+	}
+	onSubmit() { 
+		if (this.inputFormGroup.valid) {
+		 // Submit action here
+		}
 	}
 }

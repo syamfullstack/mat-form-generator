@@ -240,7 +240,7 @@ export const formatObject = (a, startSpace = '\n\t\t\t{', innerspace= '\n\t\t\t\
 };
 
 export const createActions = () => {
-	return `\n\tonSubmit() { \n\t\tif (inputFormGroup.valid) {\n\t\t ${'// Submit action here'}\n\t\t}\n\t}`
+	return `\n\tonSubmit() { \n\t\tif (this.inputFormGroup.valid) {\n\t\t ${'// Submit action here'}\n\t\t}\n\t}`
 };
 
 export const errorStateMatcher = `

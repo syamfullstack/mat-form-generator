@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MatFormGeneratorDragDropComponent } from './mat-form-generator-drag-drop/mat-form-generator-drag-drop.component';
+import { MaterialContainerComponent } from './material-container/material-container.component';
 
 
 const routes: Routes = [{
     path: '',
-    component: MatFormGeneratorDragDropComponent
+    component: MaterialContainerComponent
 }];
 
 @NgModule({
