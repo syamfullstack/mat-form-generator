@@ -1,0 +1,44 @@
+<ng-template #settings let-data>
+        <ng-container *ngIf="selectedSettings">
+          <h2 mat-dialog-title>Settings</h2>
+          <mat-dialog-content>
+             <mat-form-field class="example-full-width">
+                 <input matInput placeholder="Display Name" [formControl]="settingsFormGroup.controls.displayName">
+               </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Property Name" [formControl]="settingsFormGroup.controls.propertyName">
+            </mat-form-field>
+            <mat-form-field class="example-full-width" *ngIf="settingsFormGroup.value.required">
+                <input matInput placeholder="Required validation message" [formControl]="settingsFormGroup.controls.requiredValidationMessage">
+              </mat-form-field>
+            <ng-container *ngIf="selectedSettings.inputType === 'selectBox' || selectedSettings.inputType === 'radioButton' || selectedSettings.inputType === 'multiSelect'">
+                <mat-form-field class="custom-form-field" appearance="outline">
+                    <mat-label>Input Array</mat-label>
+                    <textarea matInput [formControl]="settingsFormGroup.controls.inputArray"></textarea>
+                  </mat-form-field>
+              <!-- <mat-form-field class="example-full-width">
+                <input matInput placeholder="Input Array" [formControl]="settingsFormGroup.controls.inputArray">
+              </mat-form-field> -->
+              <ng-container *ngTemplateOutlet="errorControl;context: {$implicit: settingsFormGroup.controls.inputArray}"></ng-container>
+
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Value Field" [formControl]="settingsFormGroup.controls.valueField">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Display Field" [formControl]="settingsFormGroup.controls.displayField">
+              </mat-form-field>
+            </ng-container>
+            <mat-checkbox [formControl]="settingsFormGroup.controls.required">Validation Required</mat-checkbox>
+            <mat-checkbox [formControl]="settingsFormGroup.controls.isFormControlOnly">FormControlOnly</mat-checkbox>
+          </mat-dialog-content>
+          <mat-dialog-actions>
+             <!-- <button mat-button (click)="onNoClick()">No Thanks</button>
+             <button mat-button [mat-dialog-close]="data.index" cdkFocusInitial>Ok</button> -->
+            <button mat-button (click)="closeSettings(data.propertyName)">No</button>
+            <button mat-button (click)="applySettings(data.propertyName)">Yes</button>
+          </mat-dialog-actions>
+        </ng-container>
+</ng-template>
+<ng-template #errorControl let-control>
+  <span *ngIf="control && control.errors && control.errors.message">{{control.errors.message}}</span>
+</ng-template>
