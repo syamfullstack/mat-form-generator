@@ -1,0 +1,30 @@
+.mat-container {
+    width: 400px;
+  }
+  
+  .custom-form-field {
+    width: 100%;
+  }
+  
+  .content-position {
+    padding-top: 25px;
+  }
+
+/* 
+.custom-radio-button.mat-radio-button {
+    display: block !important;
+  
+    label.mat-radio-label {
+      width: auto;
+    }
+  }
+
+
+.custom-checkbox mat-checkbox {
+    display: block !important;
+    cursor: default;
+  
+    label.mat-checkbox-layout {
+      cursor: pointer;
+    }
+  } */

@@ -1,0 +1,154 @@
+<!-- <div class="container pt-5 mb-5 mat-container col col-4" style="margin: 16px;" *ngIf="inputFormGroup">
+  <mat-card class="mat-card-block">
+    <mat-card-header>
+      <mat-card-title class="material-title">{{formTitle}}</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content  class="content-position">
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput [formControl]="inputFormGroup.get('name')">
+        </mat-form-field>
+        <h6>Emails</h6>
+        <ng-container *ngFor="let emailFormGroup of inputFormGroup.get('emails').controls">
+          <mat-form-field class="custom-form-field" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput [formControl]="emailFormGroup.get('email')">
+            </mat-form-field>
+        </ng-container>
+        <button mat-button (click)="addEmails()">Add Email</button>
+        <div class="pt-3">
+          <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get('gender')">
+            <mat-radio-button class="custom-radio-button" *ngFor="let option of genderList" value="{{option}}">
+                {{option}}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <mat-form-field class="custom-form-field" appearance="outline">
+            <mat-select placeholder="Select Interests" [formControl]="inputFormGroup.get('interests')" multiple>
+              <mat-select-trigger>
+                {{inputFormGroup.get('interests').value ? interestsList[0].name : ''}}
+                <span *ngIf="inputFormGroup.get('interests').value?.length > 1"
+                  class="example-additional-selection">
+                  (+{{inputFormGroup.get('interests').value.length - 1}}
+                  {{inputFormGroup.get('interests').value?.length === 2 ? 'other' : 'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let option of interestsList" [value]="option.id">
+                {{option.name}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="pt-3">
+          <mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get('active')">active</mat-checkbox>
+        </div>
+        <h6>Address</h6>
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <mat-label>Zip</mat-label>
+          <input matInput [formControl]="inputFormGroup.get('address').controls.zip">
+        </mat-form-field>
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <mat-label>State</mat-label>
+            <mat-select [formControl]="inputFormGroup.get('address').controls.state">
+              <mat-option *ngFor="let option of stateList" [value]="option">
+                {{option}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="custom-form-field" appearance="outline">
+            <mat-label>State</mat-label>
+              <mat-select [formControl]="inputFormGroup.get('address').controls.country">
+                <mat-option *ngFor="let option of countryList" [value]="option.id">
+                  {{option.name}}</mat-option>
+              </mat-select>
+          </mat-form-field>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+<pre *ngIf="inputFormGroup">{{inputFormGroup.value | json}}</pre> -->
+
+<div class="container pt-5 mb-5 mat-container col col-4" style="margin: 16px;" *ngIf="inputFormGroup">
+    <mat-card class="mat-card-block">
+        <mat-card-header>
+            <mat-card-title class="material-title">{{formTitle}}</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content  class="content-position">
+
+			<mat-form-field class="custom-form-field" appearance="outline">
+				<mat-label>Name</mat-label>
+				<input matInput [formControl]="inputFormGroup.get('name')" [errorStateMatcher]="matcher">
+				<mat-error *ngIf="inputFormGroup.get('name').hasError('required')">Name is <strong>required</strong></mat-error>
+			</mat-form-field>
+
+			<mat-form-field class="custom-form-field" appearance="outline">
+				<mat-label>Date</mat-label>
+				<input matInput [matDatepicker]="picker1" [formControl]="inputFormGroup.get('date')" [errorStateMatcher]="matcher">
+				<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+				<mat-datepicker #picker1></mat-datepicker>
+				<mat-error *ngIf="inputFormGroup.get('date').hasError('required')">Date is <strong>required</strong></mat-error>
+			</mat-form-field>
+
+			<mat-form-field class="custom-form-field" appearance="outline">
+				<mat-label>About</mat-label>
+				<textarea matInput [formControl]="inputFormGroup.get('about')"></textarea>{{validation}}
+			</mat-form-field>
+
+			<mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get('gender')">
+				<mat-radio-button class="custom-radio-button" *ngFor="let option of genderList" value="option">option</mat-radio-button>
+			</mat-radio-group>
+
+			<mat-form-field class="custom-form-field" appearance="outline">
+				<mat-select placeholder="Interests" [formControl]="inputFormGroup.get('interests')" multiple [errorStateMatcher]="matcher">
+					<mat-select-trigger>
+			{{inputFormGroup.get('interests').value ? inputFormGroup.get('interests').value[0] : ''}}<span *ngIf="inputFormGroup.get('interests').value?.length > 1" class="example-additional-selection">(+{{inputFormGroup.get('interests').value.length - 1}}{{inputFormGroup.get('interests').value?.length === 2 ? 'other' : 'others'}})</span>
+					</mat-select-trigger>
+					<mat-option *ngFor="let option of interestsList" [value]="option.id">{{option.name}}</mat-option>
+				</mat-select>
+				<mat-error *ngIf="inputFormGroup.get('interests').hasError('required')">Interests is <strong>required</strong></mat-error>
+			</mat-form-field>
+
+			<mat-checkbox class="custom-checkbox" [formControl]="inputFormGroup.get('active')">active</mat-checkbox>
+			
+			<h6>address</h6>
+
+			<mat-form-field class="custom-form-field" appearance="outline">
+				<mat-label>Village</mat-label>
+				<input matInput [formControl]="inputFormGroup.get('address').controls.village" [errorStateMatcher]="matcher">
+				<mat-error *ngIf="inputFormGroup.get('address').controls.village.hasError('required')">Village is <strong>required</strong></mat-error>
+			</mat-form-field>
+
+			<mat-form-field class="custom-form-field" appearance="outline">
+				<mat-label>State</mat-label>
+				<mat-select [formControl]="inputFormGroup.get('address').controls.state" [errorStateMatcher]="matcher">
+					<mat-option *ngFor="let option of stateList" [value]="option">{{option}}</mat-option>
+				</mat-select>
+				<mat-error *ngIf="inputFormGroup.get('address').controls.state.hasError('required')">State is <strong>required</strong></mat-error>
+			</mat-form-field>
+
+			<mat-form-field class="custom-form-field" appearance="outline">
+				<mat-label>Country</mat-label>
+				<mat-select [formControl]="inputFormGroup.get('address').controls.country" [errorStateMatcher]="matcher">
+					<mat-option *ngFor="let option of countryList" [value]="option.id">{{option.country}}</mat-option>
+				</mat-select>
+				<mat-error *ngIf="inputFormGroup.get('address').controls.country.hasError('required')">Country is <strong>required</strong></mat-error>
+			</mat-form-field>
+			
+			
+			<h6>emails</h6>
+			<ng-container *ngFor="let emailsFormGroup of inputFormGroup.get('emails').controls">
+				<mat-form-field class="custom-form-field" appearance="outline">
+					<mat-label>Email</mat-label>
+					<input matInput [formControl]="emailsFormGroup.get('email')" [errorStateMatcher]="matcher">
+					<mat-error *ngIf="emailsFormGroup.get('email').hasError('required')">Email is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</ng-container>
+      <button mat-button (click)="addEmails()">Add Emails</button>
+		</mat-card-content>
+		<mat-divider></mat-divider>
+		<mat-card-footer >
+			<button mat-button>{{cancelButtonTitle}}</button>
+			<button mat-button>{{okButtonTitle}}</button>
+		</mat-card-footer>
+	</mat-card>
+</div>
+<pre *ngIf="inputFormGroup">{{inputFormGroup.value | json}}</pre>

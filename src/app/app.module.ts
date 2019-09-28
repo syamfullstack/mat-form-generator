@@ -6,11 +6,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 
-import { MaterialFormGeneratorModule } from './material-form-generator/material-generator.module';
-import { MatFormAdvancedSettingsComponent } from './material-form-generator/mat-form-advanced-settings/mat-form-advanced-settings.component';
+import { MaterialFormGeneratorModule } from './angular/material/material.module';
+import { TemplateHeaderComponent } from './template/template-header/template-header.component';
 @NgModule({
   declarations: [
     AppComponent,
+    TemplateHeaderComponent,
   ],
   imports: [
     BrowserModule,

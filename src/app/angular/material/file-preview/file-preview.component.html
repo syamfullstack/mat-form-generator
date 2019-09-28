@@ -1,0 +1,30 @@
+
+
+<div class="file-content-container">
+    <div class="file-content-body">
+        <div class="file-content-title">
+            <h3>Generated Files</h3>
+            <p>It includes component, html, css and spec files.</p>
+        </div>
+        <div class="file-content-item" *ngIf="previewFormGroup">
+            <h4>FormGroup</h4>
+                <pre>{{previewFormGroup.value | json}}</pre>
+            </div>
+        <div class="file-content-item" *ngIf="file.component">
+            <h4>Component</h4>
+            <pre>{{file.component}}</pre>
+        </div>
+        <div class="file-content-item" *ngIf="file.component">
+            <h4>Html</h4>
+            <pre>{{file.html}}</pre>
+        </div>
+        <div class="file-content-item" *ngIf="file.component">
+            <h4>Css</h4>
+            <pre>{{file.css}}</pre>
+        </div>
+        <div class="file-content-item" *ngIf="file.component">
+            <h4>Spec</h4>
+            <pre>{{file.spec}}</pre>
+        </div>
+    </div>
+</div>

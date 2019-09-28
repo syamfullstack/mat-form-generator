@@ -3,38 +3,38 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 body {
-  background-color: #F0F1F5;
+  background-color: white;
 }
 
-.mat-container {
-  width: 400px;
-}
+// .mat-container {
+//   width: 400px;
+// }
 
-.custom-form-field {
-  width: 100%;
-}
+// .custom-form-field {
+//   width: 100%;
+// }
 
-.content-position {
-  padding-top: 25px;
-}
+// .content-position {
+//   padding-top: 25px;
+// }
 
-.custom-radio-button.mat-radio-button {
-  display: block !important;
+// .custom-radio-button.mat-radio-button {
+//   display: block !important;
 
-  label.mat-radio-label {
-    width: auto;
-  }
-}
+//   label.mat-radio-label {
+//     width: auto;
+//   }
+// }
 
-.custom-checkbox mat-checkbox {
-  display: block !important;
-  cursor: default;
+// .custom-checkbox mat-checkbox {
+//   display: block !important;
+//   cursor: default;
 
-  label.mat-checkbox-layout {
-    cursor: pointer;
-  }
-}
+//   label.mat-checkbox-layout {
+//     cursor: pointer;
+//   }
+// }
 
-.custom-toggle {
-  display: block !important;
-}
+// .custom-toggle {
+//   display: block !important;
+// }
