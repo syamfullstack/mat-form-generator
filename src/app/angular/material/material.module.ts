@@ -20,8 +20,8 @@ import {
     MatButtonModule,
     MatCardModule,
     MatDividerModule,
-    MatListModule
-    
+    MatListModule,
+    MatSnackBarModule
 } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -36,6 +36,8 @@ import { PreviewFormComponent } from './preview-form/preview-form.component';
 import { MaterialRoutingModule } from './material.route.module';
 import { MatFormGeneratorComponent } from './mat-form-generator/mat-form-generator.component';
 import { MaterialContainerComponent } from './material-container/material-container.component';
+import { FormArraySettingsComponent } from './form-array-settings/form-array-settings.component';
+import { FormGroupSettingsComponent } from './form-group-settings/form-group-settings.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { MaterialContainerComponent } from './material-container/material-contai
     FilePreviewComponent,
     PreviewFormComponent,
     MatFormGeneratorComponent,
-    MaterialContainerComponent
+    MaterialContainerComponent,
+    FormArraySettingsComponent,
+    FormGroupSettingsComponent
   ],
   imports: [
     // BrowserModule,
@@ -72,7 +76,8 @@ import { MaterialContainerComponent } from './material-container/material-contai
     MatButtonModule,
     MatCardModule,
     MatDividerModule,
-    MatListModule
+    MatListModule,
+    MatSnackBarModule
   ],
   // exports: [MatFormGeneratorDragDropComponent, MatFormGeneratorComponent],
 

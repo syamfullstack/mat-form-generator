@@ -135,12 +135,13 @@
 			
 			
 			<h6>emails</h6>
-			<ng-container *ngFor="let emailsFormGroup of inputFormGroup.get('emails').controls">
+			<ng-container *ngFor="let emailsFormGroup of inputFormGroup.get('emails').controls; let i = index">
 				<mat-form-field class="custom-form-field" appearance="outline">
 					<mat-label>Email</mat-label>
 					<input matInput [formControl]="emailsFormGroup.get('email')" [errorStateMatcher]="matcher">
 					<mat-error *ngIf="emailsFormGroup.get('email').hasError('required')">Email is <strong>required</strong></mat-error>
-				</mat-form-field>
+        </mat-form-field>
+        <button mat-button (click)="removeEmail(i)">Remove Emails</button>
 			</ng-container>
       <button mat-button (click)="addEmails()">Add Emails</button>
 		</mat-card-content>

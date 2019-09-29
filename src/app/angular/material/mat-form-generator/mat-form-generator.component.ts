@@ -195,7 +195,13 @@ export class MatFormGeneratorComponent implements OnInit {
 			email: null 
 		};
 		const emailsFormArray = this.inputFormGroup.get('emails') as FormArray;
+		// emailsFormArray.removeAt(1);
 		emailsFormArray.push(this.createEmailsFormGroup(data)); 
+	}
+
+	removeEmail(i: number) { 
+		const emailFormArray = this.inputFormGroup.get('emails') as FormArray;
+		emailFormArray.removeAt(i); 
 	}
 	onSubmit() { 
 		if (this.inputFormGroup.valid) {

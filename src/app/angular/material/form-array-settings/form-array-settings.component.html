@@ -1,0 +1,26 @@
+<ng-template #settings>
+        <ng-container *ngIf="inputFormGroup">
+            <h2 mat-dialog-title>FormArray Settings</h2>
+            <mat-dialog-content>
+                <mat-form-field class="custom-form-field" appearance="outline">
+                    <mat-label>Property Name</mat-label>
+                    <input matInput [formControl]="inputFormGroup.get('propertyName')" [errorStateMatcher]="matcher">
+                </mat-form-field>
+                <mat-error *ngIf="inputFormGroup.get('propertyName').hasError('required')">
+                        PropertyName is <strong>required</strong>
+                </mat-error>
+                <mat-form-field class="custom-form-field" appearance="outline">
+                        <mat-label>Display Name</mat-label>
+                        <input matInput [formControl]="inputFormGroup.get('displayName')" [errorStateMatcher]="matcher">
+                </mat-form-field>
+                <mat-error *ngIf="inputFormGroup.get('displayName').hasError('required')">
+                        DisplayName is <strong>required</strong>
+                </mat-error>
+            </mat-dialog-content>
+            <mat-dialog-actions>
+                <button mat-button (click)="close()">No</button>
+                <button mat-button (click)="onSubmitForms()">Yes</button>
+            </mat-dialog-actions>
+        </ng-container>
+    </ng-template>
+    

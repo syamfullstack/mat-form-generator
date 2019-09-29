@@ -66,17 +66,17 @@
         <button (click)="generateFile()" class="btn btn-light">Generate File</button>
       </div>
       <div class="col-lg-12" *ngIf="selectedControls?.length">
-        <button (click)="createFormArray()" class="btn btn-light" *ngIf="!isFormGroup">Create FormArray</button>
-        <button (click)="createFormGroup()" class="btn btn-light" *ngIf="!isFormArray">Create FormGroup</button>
+        <button (click)="createFormArray()" class="btn btn-light">Create FormArray</button>
+        <button (click)="createFormGroup()" class="btn btn-light">Create FormGroup</button>
         <button (click)="deleteControls()" class="btn btn-light">Delete</button>
-        <mat-form-field class="custom-form-field" appearance="outline" *ngIf="isFormArray">
+        <!-- <mat-form-field class="custom-form-field" appearance="outline" *ngIf="isFormArray">
           <mat-label>FormArray Name</mat-label>
           <input matInput [(ngModel)]="formArrayName">
         </mat-form-field>
-        <mat-form-field class="custom-form-field" appearance="outline" *ngIf="isFormGroup">
+        <mat-form-field class="custom-form-field" appearance="outline" *ngIf="showFormGroupSettings">
           <mat-label>FormGroup Name</mat-label>
           <input matInput [(ngModel)]="formGroupName">
-        </mat-form-field>
+        </mat-form-field> -->
       </div>
     </div>
 
@@ -245,10 +245,8 @@
   </div>
   <!-- <button (click)="removeControl(propertyName, index)">remove</button> -->
 </ng-template>
-
-
-
-
+<app-form-group-settings [show]="showFormGroupSettings" (onClose)="closeFormGroupSettings()" (onSubmit)="submitFormGroupSettings($event)"></app-form-group-settings>
+<app-form-array-settings [show]="showFormArraySettings" (onClose)="closeFormArraySettings()" (onSubmit)="submitFormArraySettings($event)"></app-form-array-settings>
 
   <!-- <ng-container *ngFor="let data of selectedControls; let i= index">
               <ng-container *ngIf="inputFormGroup.get(data.propertyName)">

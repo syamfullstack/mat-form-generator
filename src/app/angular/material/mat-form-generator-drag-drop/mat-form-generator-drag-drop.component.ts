@@ -14,6 +14,7 @@ import { getControls } from '../utilities/controls';
 import { GlobalFormSettingsComponent } from '../global-form-settings/global-form-settings.component';
 import { pages } from 'src/app/angular/material/file-generator/data';
 import { AdvancedSettingsAction } from '../model/advanced-settings.model';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
 	selector: 'app-mat-form-generator-drag-drop',
@@ -36,10 +37,10 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 		cancel: () => {}
 	};
 
-	isFormArray = false;
-	isFormGroup = false;
-	formArrayName: string;
-	formGroupName: string;
+	showFormArraySettings = false;
+	showFormGroupSettings = false;
+	// formArrayName: string;
+	// formGroupName: string;
 	selectedControls1: any = [];
 	pages: any;
 
@@ -50,7 +51,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 	@ViewChild('globalSettings', { static: true, read: ViewContainerRef })
 	globalSettings: ViewContainerRef;
 
-	constructor(private formBuilder: FormBuilder, private componentFactoryResolver: ComponentFactoryResolver) {}
+	constructor(private formBuilder: FormBuilder, private componentFactoryResolver: ComponentFactoryResolver, private _snackBar: MatSnackBar) {}
 
 	ngOnInit() {
 		// this.selectedControls1 = [
@@ -244,20 +245,20 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 	//   this.selectedControls = this.selectedControls.filter((a, i) => i !== index);
 	// }
 
-	createFormArray() {
+	createFormArray(settings) {
 		const selectedFormArrayControls = this.selectedControls.filter((a) => a.selected);
 		const selectedFormArrayControls1 = this.selectedControls1.filter((a: any) => a.selected);
-		if (this.isFormArray) {
-			this.isFormArray = false;
-			let formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
+		if (this.showFormArraySettings) {
+			this.closeFormArraySettings();
+			let formArray = this.inputFormGroup.get(settings.propertyName) as FormArray;
 			if (!formArray) {
 				// this.selectedControls1[this.formArrayName] = {
 				//   displayName: this.formArrayName,
 				//   formArrayName: this.formArrayName,
 				//   controls: {}
 				// };
-				this.inputFormGroup.addControl(this.formArrayName, new FormArray([]));
-				formArray = this.inputFormGroup.get(this.formArrayName) as FormArray;
+				this.inputFormGroup.addControl(settings.propertyName, new FormArray([]));
+				formArray = this.inputFormGroup.get(settings.propertyName) as FormArray;
 			}
 			const formGroup = this.formBuilder.group({});
 			let controls = [];
@@ -279,21 +280,22 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 			});
 			// this.selectedControls1[this.formArrayName].controls = [controls];
 			this.selectedControls1.push({
-				displayName: this.formArrayName,
-				formArrayName: this.formArrayName,
+				displayName: settings.displayName,
+				formArrayName: settings.propertyName,
 				controls: [ controls ]
       });
-      this.formArrayName = null;
+      // this.formArrayName = null;
 			formArray.push(formGroup);
-		} else if (!this.isFormArray && selectedFormArrayControls1.length) {
-			this.isFormArray = true;
+		} else {
+			// this.isFormArray = true;
+			this.openFormArraySettings();
 		}
 	}
 
-	createFormGroup() {
-		if (this.isFormGroup) {
-			this.isFormGroup = false;
-			let formGroup = this.inputFormGroup.get(this.formGroupName) as FormGroup;
+	createFormGroup(settings) {
+		if (this.showFormGroupSettings) {
+			this.closeFormGroupSettings();
+			let formGroup = this.inputFormGroup.get(settings.propertyName) as FormGroup;
 			const selectedFormArrayControls1 = Object.values(this.selectedControls1).filter((a: any) => a.selected);
 			if (!formGroup) {
 				// this.selectedControls1[this.formGroupName] = {
@@ -302,8 +304,8 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 				//   formGroupName: this.formGroupName,
 				//   controls: {}
 				// };
-				this.inputFormGroup.addControl(this.formGroupName, this.formBuilder.group({}));
-				formGroup = this.inputFormGroup.get(this.formGroupName) as FormGroup;
+				this.inputFormGroup.addControl(settings.propertyName, this.formBuilder.group({}));
+				formGroup = this.inputFormGroup.get(settings.propertyName) as FormGroup;
 				let controls = [];
 				selectedFormArrayControls1.forEach((a: any) => {
 					this.inputFormGroup.removeControl(a.propertyName);
@@ -318,15 +320,15 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 				});
 				// this.selectedControls1[this.formGroupName].controls = controls;
 				this.selectedControls1.push({
-					displayName: this.formGroupName,
+					displayName: settings.displayName,
 					formArrayName: null,
-					formGroupName: this.formGroupName,
+					formGroupName: settings.propertyName,
 					controls: controls
         });
-        this.formGroupName = null;
 			}
 		} else {
-			this.isFormGroup = true;
+			// this.showFormGroupSettings = true;
+			this.openFormGroupSettings();
 		}
 	}
 
@@ -372,6 +374,7 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
     }
     this.createForm();
 	}
+
 	generateFile() {
 		this.pages[0].formData.controls = this.selectedControls1;
 		this.pages = [ ...this.pages ];
@@ -379,6 +382,44 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
 
 	setPreviewFormGroup($event) {
 		this.previewFormGroup = $event;
+	}
+
+	openFormGroupSettings() {
+		if (this.selectedControls1.filter(a => a.selected).length) {
+			this.showFormGroupSettings = true;
+		} else {
+			this.showWarningMessage('You have no selectedcontrols');
+		}
+	}
+
+	closeFormGroupSettings() {
+		this.showFormGroupSettings = false;
+	}
+
+	submitFormGroupSettings($event) {
+		this.createFormGroup($event);
+	}
+
+	openFormArraySettings() {
+		if (this.selectedControls1.filter(a => a.selected).length) {
+			this.showFormArraySettings = true;
+		} else {
+			this.showWarningMessage('You have no selectedcontrols');
+		}
+	}
+
+	closeFormArraySettings() {
+		this.showFormArraySettings = false;
+	}
+
+	submitFormArraySettings($event) {
+		this.createFormArray($event);
+	}
+
+	showWarningMessage(message) {
+		this._snackBar.open(message, '', {
+      duration: 2000,
+    });
 	}
 }
 /*
@@ -392,6 +433,8 @@ export class MatFormGeneratorDragDropComponent implements OnInit {
   8. Clean up
 	9. delete , display name for formarray or formgroup
 	10. Add inital value for formArrays
-	11. Add an add button for form array.
+	11. Add an add button for form array. => Done
+	12. Object key validation.
+	13. Show modules to be imported.
 
 */

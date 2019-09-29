@@ -148,7 +148,7 @@ export const createForm = (formSection, classContent, controls) => {
 			});
 			const propertyName = `${control.formArrayName.charAt(0).toUpperCase() +
 				control.formArrayName.substring(1)}`;
-
+			// Create formgroup for formarray
 			let methods = `create${propertyName}FormGroup(data) {\n\t\treturn this.formBuilder.group({${childFormGroupBody}\n\t\t});\n\t}`;
 
 			//////////////////////////////////////////////////////////////////////////
@@ -158,10 +158,10 @@ export const createForm = (formSection, classContent, controls) => {
 			const formArrayAction = `${control.formArrayName +
 				'FormArray'}.push(this.create${control.formArrayName.charAt(0).toUpperCase() +
 				control.formArrayName.substring(1)}FormGroup(data));`;
-			methods =
-				methods +
-				`\n\n\tadd${propertyName}() { \n\t\t${dataObject}\n\t\t${formArray}\n\t\t${formArrayAction} \n\t}`;
-			classContent.methods = classContent.methods + '\n\t' + methods;
+			const formArrayDeleteAction = `${control.formArrayName + 'FormArray'}.removeAt(i);`;
+			methods = methods + `\n\n\tadd${propertyName}() { \n\t\t${dataObject}\n\t\t${formArray}\n\t\t${formArrayAction} \n\t}`;
+			methods = methods + `\n\n\tremove${propertyName}(i: number) { \n\t\t${formArray}\n\t\t${formArrayDeleteAction} \n\t}`;
+			classContent.methods = classContent.methods + '\n\t' + methods + '\n';
 
 			/////////////////////////////////////////////////////////////////////////
 			formGroupBody =

@@ -52,8 +52,10 @@ export const getHtmlContent = (input) => {
                         formArrayWrapper.content += htmlControl;
                     }
                 });
+                formArrayWrapper.content += '\n\t\t\t\t' + matFormArrayWrapper.addButton.replace('{{method}}', `remove${formArrayName}(i)`).replace('{{buttonTitle}}', `Remove ${formArrayName}`);
+                // add 'remove button' for formarray.
                 // formArrayWrapper.content += '\n\t\t\t\t' + matFormArrayWrapper.addButton.replace('{{method}}', `add${formArrayName}`).replace('{{buttonTitle}}', `Add ${formArrayName}`);
-                const formArrayAddButton = '\n\t\t\t' + matFormArrayWrapper.addButton.replace('{{method}}', `add${formArrayName}`).replace('{{buttonTitle}}', `Add ${formArrayName}`);
+                const formArrayAddButton = '\n\t\t\t' + matFormArrayWrapper.addButton.replace('{{method}}', `add${formArrayName}()`).replace('{{buttonTitle}}', `Add ${formArrayName}`);
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 const formArrayContent = '\n\t\t\t' + formArrayWrapper.header + formArrayWrapper.content + '\n\t\t\t' + formArrayWrapper.footer + formArrayAddButton;
@@ -218,10 +220,10 @@ export const matForm = {
 }
 
 export const matFormArrayWrapper = {
-    header: `<h6>{{formArrayTitle}}</h6>\n\t\t\t<ng-container *ngFor="let {{formGroup}} of inputFormGroup.get('{{formArrayControlName}}').controls">`,
+    header: `<h6>{{formArrayTitle}}</h6>\n\t\t\t<ng-container *ngFor="let {{formGroup}} of inputFormGroup.get('{{formArrayControlName}}').controls; let i = index">`,
     content: '',
     footer: '</ng-container>',
-    addButton: '<button mat-button (click)="{{method}}()">{{buttonTitle}}</button>'
+    addButton: '<button mat-button (click)="{{method}}">{{buttonTitle}}</button>'
 }
 
 export const matFormGroupWrapper = {
