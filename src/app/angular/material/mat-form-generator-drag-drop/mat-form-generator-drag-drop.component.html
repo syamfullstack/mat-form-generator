@@ -150,6 +150,7 @@
           <div class="custom-radio-button-container" cdkDrag>
             <mat-checkbox class="control-selector" [ngClass]="(formArrayName || formGroupName) ? 'custom-checkbox-hidden': ''" [(ngModel)]="data.selected"></mat-checkbox>
             <div class="custom-radio-buttons">
+                <span>{{data.displayName}}</span>
               <mat-radio-group aria-label="Select an option" [formControl]="inputFormGroup.get(data.propertyName)" cdkDrag>
                 <mat-radio-button class="custom-radio-button" *ngFor="let option of data.inputArray"
                   value="{{data.valueField ? option[data.valueField] : option}}">
